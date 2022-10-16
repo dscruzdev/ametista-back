@@ -1,4 +1,4 @@
-const request = require("./routes/request");
+const request = require("../model/mRequest");
 
 exports.create = (req, res) => {
     //send to database
