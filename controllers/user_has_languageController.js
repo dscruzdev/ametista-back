@@ -1,12 +1,12 @@
 const db = require("../model/db");
-const Comment = require('../model/mComment');
+const User_has_Language = require('../model/mUser_has_Language');
 
 exports.create = async (data, res) => {
     await db.sync();
-    response = await Comment.create({
-        Requests_id: data.Requests_id,
-        Users_cpf: data.Users_cpf,
-        comment: data.comment,
+    response = await User_has_Language.create({
+        cpfUser: data.cpfUser,
+        idLanguage: data.idLanguage,
+        
     });
     return response;
 }
@@ -14,13 +14,13 @@ exports.create = async (data, res) => {
 exports.select = async (filters = null, res) => {
     if (filters == null) {
         await db.sync();
-        response = await Comment.findAll();
+        response = await User_has_Language.findAll();
         return response;
     } else {
         //separate the filters here
         //We can build the filter out of the function and just put in findAll later
         await db.sync();
-        response = await Comment.findAll({
+        response = await User_has_Language.findAll({
             where: {
                 'filter.param': 'filter.value' //out of '
             }
@@ -31,10 +31,13 @@ exports.select = async (filters = null, res) => {
 }
 
 exports.update = async (data, res) => {
-    const tochange = await Request.findByPk(data.id);
-    tochange.Requests_id = data.Requests_id ? data.Requests_id : tochange.Requests_id;
-    tochange.Users_cpf = data.Users_cpf ? data.Users_cpf : tochange.Users_cpf;
-    tochange.comment = data.comment ? data.comment : tochange.comment;
+    const tochange = await User_has_Language.findAll({where: {
+        cpfUser: data.cpfUser,
+        idLanguage: data.idLanguage
+    }});//Rever
+    tochange.cpfUser = data.cpfUser ? data.cpfUser : tochange.cpfUser;
+    tochange.idLanguage = data.idLanguage ? data.idLanguage : tochange.idLanguage;
+    
 
     response = await tochange.save();
 
@@ -43,9 +46,10 @@ exports.update = async (data, res) => {
 }
 
 exports.delete = async (data, res) => {
-    Comment.destroy({
+    return client.destroy({
         where: {
-            id: data.id
+            cpfUser: data.cpfUser,
+            idLanguage: data.idLanguage,
         }
     });
 

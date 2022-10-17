@@ -1,11 +1,11 @@
-const clientController = require("../controllers/clientController");
+const user_has_languageController = require("../controllers/user_has_languageController");
 
 exports.create = async (req, res) => {
     data = req.body;
     //rules
     if (true) {
-        client = await clientController.create(data, res);
-        return res.status(201).json(client);
+        user_has_language = await user_has_languageController.create(data, res);
+        return res.status(201).json(user_has_language);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
     }
@@ -19,17 +19,18 @@ exports.select = async (req, res) => {
         console.log("No filter");
         //rules
         if (true) {
-            clients = await clientController.select(null, res);
-            return res.status(200).json(clients);
+            user_has_languages = await user_has_languageController.select(null, res);
+            return res.status(200).json(user_has_languages);
         } else {
             return res.status(401).json({ 'message': 'Unauthorized' });
         }
     } else {
-        const filters = null; //We can build a filter object here
+        const filters = null;
         //rules
         if (true) {
-            clients = await clientController.select(filters, res);
-            return res.status(200).json(clients);
+
+            user_has_languages = user_has_languageController.select(filters, res);
+            return res.status(200).json(user_has_languages);
         } else {
             return res.status(401).json({ 'message': 'Unauthorized' });
         }
@@ -41,8 +42,8 @@ exports.update = async (req, res) => {
     data.cpf = req.params.id;
     //rules
     if (true) {
-        client = clientController.update(data, res);
-        return res.status(200).json(client);
+        user_has_language = await user_has_languageController.update(data, res);
+        return res.status(200).json(user_has_language);
 
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
@@ -53,8 +54,8 @@ exports.delete = async (req, res) => {
     data.cpf = req.params.id;
     //rules
     if (true) {
-        client = await clientController.delete(data, res);
-        return res.status(200).json(client);
+        user_has_language = await user_has_languageController.delete(data, res);
+        return res.status(200).json(user_has_language);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
     }

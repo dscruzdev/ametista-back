@@ -1,11 +1,11 @@
-const clientController = require("../controllers/clientController");
+const commentController = require("../controllers/commentController");
 
 exports.create = async (req, res) => {
     data = req.body;
     //rules
     if (true) {
-        client = await clientController.create(data, res);
-        return res.status(201).json(client);
+        comment = await commentController.create(data, res);
+        return res.status(201).json(comment);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
     }
@@ -19,8 +19,8 @@ exports.select = async (req, res) => {
         console.log("No filter");
         //rules
         if (true) {
-            clients = await clientController.select(null, res);
-            return res.status(200).json(clients);
+            comments = await commentController.select(null, res);
+            return res.status(200).json(comments);
         } else {
             return res.status(401).json({ 'message': 'Unauthorized' });
         }
@@ -28,8 +28,8 @@ exports.select = async (req, res) => {
         const filters = null; //We can build a filter object here
         //rules
         if (true) {
-            clients = await clientController.select(filters, res);
-            return res.status(200).json(clients);
+            comments = await commentController.select(filters, res);
+            return res.status(200).json(comments);
         } else {
             return res.status(401).json({ 'message': 'Unauthorized' });
         }
@@ -41,8 +41,8 @@ exports.update = async (req, res) => {
     data.cpf = req.params.id;
     //rules
     if (true) {
-        client = clientController.update(data, res);
-        return res.status(200).json(client);
+        comment = commentController.update(data, res);
+        return res.status(200).json(comment);
 
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
@@ -53,8 +53,8 @@ exports.delete = async (req, res) => {
     data.cpf = req.params.id;
     //rules
     if (true) {
-        client = await clientController.delete(data, res);
-        return res.status(200).json(client);
+        comment = await commentController.delete(data, res);
+        return res.status(200).json(comment);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
     }

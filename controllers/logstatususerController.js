@@ -1,12 +1,10 @@
 const db = require("../model/db");
-const Comment = require('../model/mComment');
+const LogStatusUser = require('../model/mLogStatusUser');
 
 exports.create = async (data, res) => {
     await db.sync();
-    response = await Comment.create({
-        Requests_id: data.Requests_id,
-        Users_cpf: data.Users_cpf,
-        comment: data.comment,
+    response = await LogStatusUser.create({
+        status: data.status,
     });
     return response;
 }
@@ -14,13 +12,13 @@ exports.create = async (data, res) => {
 exports.select = async (filters = null, res) => {
     if (filters == null) {
         await db.sync();
-        response = await Comment.findAll();
+        response = await LogStatusUser.findAll();
         return response;
     } else {
         //separate the filters here
         //We can build the filter out of the function and just put in findAll later
         await db.sync();
-        response = await Comment.findAll({
+        response = await LogStatusUser.findAll({
             where: {
                 'filter.param': 'filter.value' //out of '
             }
@@ -31,10 +29,8 @@ exports.select = async (filters = null, res) => {
 }
 
 exports.update = async (data, res) => {
-    const tochange = await Request.findByPk(data.id);
-    tochange.Requests_id = data.Requests_id ? data.Requests_id : tochange.Requests_id;
-    tochange.Users_cpf = data.Users_cpf ? data.Users_cpf : tochange.Users_cpf;
-    tochange.comment = data.comment ? data.comment : tochange.comment;
+    const tochange = await LogStatusUser.findByPk(data.idLogStatus);
+    tochange.status = data.status ? data.status : tochange.status;
 
     response = await tochange.save();
 
@@ -43,9 +39,9 @@ exports.update = async (data, res) => {
 }
 
 exports.delete = async (data, res) => {
-    Comment.destroy({
+    return client.destroy({
         where: {
-            id: data.id
+            idLogStatus: data.idLogStatus
         }
     });
 

@@ -14,14 +14,14 @@ exports.create = async (data, res) => {
         idLanguage: data.idLanguage,
         idSubject: data.idSubject,
     });
-    return res.status(201).json({ response });
+    return response;
 }
 
 exports.select = async (filters = null, res) => {
     if (filters == null) {
         await db.sync();
         response = await Request.findAll();
-        return res.status(200).json(response);
+        return response;
     } else {
         //separate the filters here
         //We can build the filter out of the function and just put in findAll later
@@ -31,7 +31,7 @@ exports.select = async (filters = null, res) => {
                 'filter.param': 'filter.value' //out of '
             }
         });
-        return res.status(200).json(response);
+        return response;
     }
 
 }
@@ -49,12 +49,12 @@ exports.update = async (data, res) => {
 
     response = await tochange.save();
 
-    return res.status(200).json(response);
+    return response;
 
 }
 
 exports.delete = async (data, res) => {
-    client.destroy({
+    return client.destroy({
         where: {
             id: data.id
         }

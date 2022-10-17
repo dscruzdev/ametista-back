@@ -1,11 +1,11 @@
-const clientController = require("../controllers/clientController");
+const area_has_userController = require("../controllers/area_has_userController");
 
 exports.create = async (req, res) => {
     data = req.body;
     //rules
     if (true) {
-        client = await clientController.create(data, res);
-        return res.status(201).json(client);
+        area_has_user = await area_has_userController.create(data, res);
+        return res.status(201).json(area_has_user);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
     }
@@ -19,8 +19,8 @@ exports.select = async (req, res) => {
         console.log("No filter");
         //rules
         if (true) {
-            clients = await clientController.select(null, res);
-            return res.status(200).json(clients);
+            area_has_users = await area_has_userController.select(null, res);
+            return res.status(200).json(area_has_users);
         } else {
             return res.status(401).json({ 'message': 'Unauthorized' });
         }
@@ -28,8 +28,8 @@ exports.select = async (req, res) => {
         const filters = null; //We can build a filter object here
         //rules
         if (true) {
-            clients = await clientController.select(filters, res);
-            return res.status(200).json(clients);
+            area_has_users = await area_has_userController.select(filters, res);
+            return res.status(200).json(area_has_users);
         } else {
             return res.status(401).json({ 'message': 'Unauthorized' });
         }
@@ -41,8 +41,8 @@ exports.update = async (req, res) => {
     data.cpf = req.params.id;
     //rules
     if (true) {
-        client = clientController.update(data, res);
-        return res.status(200).json(client);
+        area_has_user = area_has_userController.update(data, res);
+        return res.status(200).json(area_has_user);
 
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
@@ -53,8 +53,8 @@ exports.delete = async (req, res) => {
     data.cpf = req.params.id;
     //rules
     if (true) {
-        client = await clientController.delete(data, res);
-        return res.status(200).json(client);
+        area_has_user = await area_has_userController.delete(data, res);
+        return res.status(200).json(area_has_user);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
     }

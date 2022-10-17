@@ -1,14 +1,17 @@
-//const Client = require("../model/mClient");
-const client = require('../model/mClient');
+
 const db = require("../model/db");
+const User = require('../model/mUser');
 
 exports.create = async (data, res) => {
     await db.sync();
-    response = await client.create({
+    response = await User.create({
         cpf: data.cpf,
         name: data.name,
         email: data.email,
-        phone: data.phone
+        password: data.password,
+        status: data.status,
+        user_level: data.user_level,
+
     });
     return response;
 }
@@ -16,12 +19,13 @@ exports.create = async (data, res) => {
 exports.select = async (filters = null, res) => {
     if (filters == null) {
         await db.sync();
-        return response = await client.findAll();
+        response = await User.findAll();
+        return response;
     } else {
         //separate the filters here
         //We can build the filter out of the function and just put in findAll later
         await db.sync();
-        response = await client.findAll({
+        response = await User.findAll({
             where: {
                 'filter.param': 'filter.value' //out of '
             }
@@ -32,10 +36,13 @@ exports.select = async (filters = null, res) => {
 }
 
 exports.update = async (data, res) => {
-    const tochange = await client.findByPk(data.cpf);
+    const tochange = await User.findByPk(data.cpf);
     tochange.name = data.name ? data.name : tochange.name;
     tochange.email = data.email ? data.email : tochange.email;
-    tochange.phone = data.phone ? data.phone : tochange.phone;
+    tochange.password = data.password ? data.password : tochange.password;
+    tochange.status = data.status ? data.status : tochange.status;
+    tochange.user_level = data.user_level ? data.user_level : tochange.user_level;
+
 
     response = await tochange.save();
 

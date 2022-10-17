@@ -1,26 +1,25 @@
 const db = require("../model/db");
-const Comment = require('../model/mComment');
+const Request = require('../model/mRequest');
 
 exports.create = async (data, res) => {
     await db.sync();
-    response = await Comment.create({
-        Requests_id: data.Requests_id,
-        Users_cpf: data.Users_cpf,
-        comment: data.comment,
+    response = await Request.create({
+        idLogStatus: data.idLogStatus,
+        User_cpf: data.User_cpf,
     });
-    return response;
+    return  response;
 }
 
 exports.select = async (filters = null, res) => {
     if (filters == null) {
         await db.sync();
-        response = await Comment.findAll();
+        response = await Request.findAll();
         return response;
     } else {
         //separate the filters here
         //We can build the filter out of the function and just put in findAll later
         await db.sync();
-        response = await Comment.findAll({
+        response = await Request.findAll({
             where: {
                 'filter.param': 'filter.value' //out of '
             }
@@ -31,10 +30,9 @@ exports.select = async (filters = null, res) => {
 }
 
 exports.update = async (data, res) => {
-    const tochange = await Request.findByPk(data.id);
-    tochange.Requests_id = data.Requests_id ? data.Requests_id : tochange.Requests_id;
-    tochange.Users_cpf = data.Users_cpf ? data.Users_cpf : tochange.Users_cpf;
-    tochange.comment = data.comment ? data.comment : tochange.comment;
+    const tochange = await Request.findByPk(data.cpf);//Rever
+    tochange.idLogStatus = data.idLogStatus ? data.idLogStatus : tochange.idLogStatus;
+    tochange.User_cpf = data.User_cpf ? data.User_cpf : tochange.User_cpf;
 
     response = await tochange.save();
 
@@ -43,9 +41,10 @@ exports.update = async (data, res) => {
 }
 
 exports.delete = async (data, res) => {
-    Comment.destroy({
+    return client.destroy({
         where: {
-            id: data.id
+            idLogStatus: data.idLogStatus,
+            User_cpf: data.User_cpf
         }
     });
 

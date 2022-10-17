@@ -1,11 +1,11 @@
-const clientController = require("../controllers/clientController");
+const subjectController = require("../controllers/subjectController");
 
 exports.create = async (req, res) => {
     data = req.body;
     //rules
     if (true) {
-        client = await clientController.create(data, res);
-        return res.status(201).json(client);
+        subject = await subjectController.create(data, res);
+        return res.status(201).json(subject);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
     }
@@ -19,17 +19,17 @@ exports.select = async (req, res) => {
         console.log("No filter");
         //rules
         if (true) {
-            clients = await clientController.select(null, res);
-            return res.status(200).json(clients);
+            subjects = await subjectController.select(null, res);
+            return res.status(200).json(subjects);
         } else {
             return res.status(401).json({ 'message': 'Unauthorized' });
         }
     } else {
-        const filters = null; //We can build a filter object here
+        const filters = null;
         //rules
         if (true) {
-            clients = await clientController.select(filters, res);
-            return res.status(200).json(clients);
+            subjects = await subjectController.select(filters, res);
+            return res.status(200).json(subjects);
         } else {
             return res.status(401).json({ 'message': 'Unauthorized' });
         }
@@ -41,8 +41,8 @@ exports.update = async (req, res) => {
     data.cpf = req.params.id;
     //rules
     if (true) {
-        client = clientController.update(data, res);
-        return res.status(200).json(client);
+        subject = await subjectController.update(data, res);
+        return res.status(200).json(subject);
 
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
@@ -53,8 +53,8 @@ exports.delete = async (req, res) => {
     data.cpf = req.params.id;
     //rules
     if (true) {
-        client = await clientController.delete(data, res);
-        return res.status(200).json(client);
+        subject = await subjectController.delete(data, res);
+        return res.status(200).json(subject);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
     }
