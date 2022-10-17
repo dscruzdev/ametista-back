@@ -1,18 +1,64 @@
-const request = require("../model/mRequest");
+const db = require("../model/db");
+const Request = require('../model/mRequest');
 
-exports.create = (req, res) => {
-    //send to database
-    data = req.body;
+exports.create = async (data, res) => {
+    await db.sync();
+    response = await Request.create({
+        Client_cpf: data.Client_cpf,
+        category: data.category,
+        endedAt: data.endedAt,
+        description: data.description,
+        deadline: data.deadline,
+        priority: data.priority,
+        status: data.status,
+        idLanguage: data.idLanguage,
+        idSubject: data.idSubject,
+    });
+    return res.status(201).json({ response });
+}
 
-    var pad = function (num) { return ('00' + num).slice(-2) };
-    var date = new Date();
-    date = date.getUTCFullYear() + '-' +
-        pad(date.getUTCMonth() + 1) + '-' +
-        pad(date.getUTCDate()) + ' ' +
-        pad(date.getUTCHours() - 3) + ':' +
-        pad(date.getUTCMinutes()) + ':' +
-        pad(date.getUTCSeconds());
-    request1 = new request(2, 14, "Finance", "Não recebi o boleto", date);
-    // //console.log(request1);
-    res.status(200).json(request1);
+exports.select = async (filters = null, res) => {
+    if (filters == null) {
+        await db.sync();
+        response = await Request.findAll();
+        return res.status(200).json(response);
+    } else {
+        //separate the filters here
+        //We can build the filter out of the function and just put in findAll later
+        await db.sync();
+        response = await Request.findAll({
+            where: {
+                'filter.param': 'filter.value' //out of '
+            }
+        });
+        return res.status(200).json(response);
+    }
+
+}
+
+exports.update = async (data, res) => {
+    const tochange = await Request.findByPk(data.cpf);
+    tochange.category = data.category ? data.category : tochange.category;
+    tochange.endedAt = data.endedAt ? data.endedAt : tochange.endedAt;
+    tochange.description = data.description ? data.description : tochange.description;
+    tochange.deadline = data.deadline ? data.deadline : tochange.deadline;
+    tochange.priority = data.priority ? data.priority : tochange.priority;
+    tochange.status = data.status ? data.status : tochange.status;
+    tochange.idLanguage = data.idLanguage ? data.idLanguage : tochange.idLanguage;
+    tochange.idSubject = data.idSubject ? data.idSubject : tochange.idSubject;
+
+    response = await tochange.save();
+
+    return res.status(200).json(response);
+
+}
+
+exports.delete = async (data, res) => {
+    client.destroy({
+        where: {
+            id: data.id
+        }
+    });
+
+
 }

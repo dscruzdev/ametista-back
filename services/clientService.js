@@ -26,7 +26,7 @@ exports.select = (req, res) => {
         const filters = null;
         //rules
         if (true) {
-            
+
             clientController.select(filters, res);
         } else {
             return res.status(401).json({ 'message': 'Unauthorized' });
@@ -37,8 +37,19 @@ exports.select = (req, res) => {
 exports.update = (req, res) => {
     data = req.body;
     data.cpf = req.params.id;
+    //rules
     if (true) {
         clientController.update(data, res);
+    } else {
+        return res.status(401).json({ 'message': 'Unauthorized' });
+    }
+}
+
+exports.delete = (req, res) => {
+    data.cpf = req.params.id;
+    //rules
+    if (true) {
+        clientController.delete(data, res);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
     }

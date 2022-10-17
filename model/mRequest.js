@@ -1,19 +1,60 @@
+const Sequelize = require('sequelize');
+const database = require("./db");
+const client = require('./mClient');
+const subject = require('./mSubject');
+const language = require('./mLanguage');
 
-class Request {
-    constructor(id, client_id, category, subject, created_at, ended_at, description, deadline, priority, commment, status) {
-        this.id = id;
-        this.client_id = client_id
-        this.category = category
-        this.subject = subject
-        this.created_at = created_at;
-        this.ended_at = ended_at;
-        this.description = description;
-        this.deadline = deadline;
-        this.priority = priority;
-        this.commment = commment;
-        this.status = status;
+const Request = database.define('Request', {
+    id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    Client_cpf: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        references: {
+            model: client,
+            key: 'cpf'
+        }
+    },
+    category: {
+        type: Sequelize.STRING,
+    },
+    endedAt: {
+        type: 'TIMESTAMP',
+
+    },
+    description: {
+        type: Sequelize.STRING,
+
+    },
+    deadline: {
+        type: 'TIMESTAMP'
+    },
+    priority: {
+        type: Sequelize.INTEGER
+    },
+    status: {
+        type: Sequelize.STRING,
+
+    },
+    idLanguage: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: language,
+            key: 'id'
+        }
+    },
+    idSubject: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: subject,
+            key: 'id'
+        }
+
     }
-}
-
-module.exports = Request;
-
+}, {
+    deletedAt: true
+})
