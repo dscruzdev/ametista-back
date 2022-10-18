@@ -4,7 +4,7 @@ const app = express();
 
 require("dotenv").config();
 
-const sms = require("./routes/sms");
+const sendmessage = require("./routes/sendmessage");
 const requestRoute = require("./routes/request");
 const clientRoute = require("./routes/client");
 
@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
     }, 200)
 });
 
-app.use("/sms", sms);
+app.use("/send", sendmessage);
 app.use("/request", requestRoute);
 app.use("/client", clientRoute);
 app.get("/teste", async (req, res) => {
