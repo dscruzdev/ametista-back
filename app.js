@@ -7,25 +7,20 @@ require("dotenv").config();
 const sendmessage = require("./routes/sendmessage");
 const requestRoute = require("./routes/request");
 const clientRoute = require("./routes/client");
+const userRoute = require("./routes/user");
+const authRoute = require("./routes/auth");
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require('twilio')(accountSid, authToken);
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.json({
-        "accountSid": accountSid,
-        "authToken": authToken
-    }, 200)
-});
 
+app.use("/auth", sendmessage);
 app.use("/send", sendmessage);
 app.use("/request", requestRoute);
 app.use("/client", clientRoute);
+app.use("/user", userRoute);
 app.get("/teste", async (req, res) => {
     teste = req.body;
     res.status(201).json({'message':teste});
