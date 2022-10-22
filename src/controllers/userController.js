@@ -1,6 +1,6 @@
 
-const db = require("../model/db");
-const User = require('../model/mUser');
+const db = require("../models/db");
+const User = require('../models/mUser');
 
 exports.create = async (data, res) => {
     await db.sync();
@@ -31,6 +31,14 @@ exports.select = async (filters = null, res) => {
         return response;
     }
 
+}
+
+exports.selectOne = async (filters = null, res) => {
+    await db.sync();
+    response = await User.findOne({
+        where: filters
+    });
+    return response;
 }
 
 

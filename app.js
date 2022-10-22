@@ -4,11 +4,11 @@ const app = express();
 
 require("dotenv").config();
 
-const sendmessage = require("./routes/sendmessage");
-const requestRoute = require("./routes/request");
-const clientRoute = require("./routes/client");
-const userRoute = require("./routes/user");
-const authRoute = require("./routes/auth");
+const sendmessage = require("./src/routes/sendmessage");
+const requestRoute = require("./src/routes/request");
+const clientRoute = require("./src/routes/client");
+const userRoute = require("./src/routes/user");
+const authRoute = require("./src/routes/auth");
 
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 app.use(express.json());
 
 
-app.use("/auth", sendmessage);
+app.use("/auth", authRoute);
 app.use("/send", sendmessage);
 app.use("/request", requestRoute);
 app.use("/client", clientRoute);

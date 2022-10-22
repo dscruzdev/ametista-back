@@ -1,6 +1,6 @@
 //const Client = require("../model/mClient");
-const client = require('../model/mClient');
-const db = require("../model/db");
+const client = require('../models/mClient');
+const db = require("../models/db");
 
 exports.create = async (data, res) => {
     await db.sync();
