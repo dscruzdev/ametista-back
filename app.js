@@ -5,6 +5,7 @@ const app = express();
 require("dotenv").config();
 
 const sendmessage = require("./src/routes/sendmessage");
+const receivemessage = require("./src/routes/receivemessage");
 const requestRoute = require("./src/routes/request");
 const clientRoute = require("./src/routes/client");
 const userRoute = require("./src/routes/user");
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use("/auth", authRoute);
 app.use("/send", sendmessage);
+app.use("/receive", receivemessage);
 app.use("/request", requestRoute);
 app.use("/client", clientRoute);
 app.use("/user", userRoute);

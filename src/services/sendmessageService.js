@@ -52,8 +52,8 @@ exports.sendMessageMessenger = async (req, res) => {
     data = req.body
 
 
-    to = data.to; // Change to your recipient
-    from = fbid; // Change to your verified sender
+    to = 'messenger:' + data.to; // Change to your recipient
+    from = 'messenger:' + fbid; // Change to your verified sender
     body = data.body;
     //html: '<strong>and easy to do anywhere, even with Node.js</strong>',
 
@@ -61,9 +61,9 @@ exports.sendMessageMessenger = async (req, res) => {
     if (true) {
         sentMessage = await sendMessageController.sendMessageMessenger(from, to, body);
 
-        res.status(200).json(sentMessage);
+        return res.status(200).json(sentMessage);
 
-        res.status(sentMessage.code).json(sentMessage);
+        //res.status(sentMessage.code).json(sentMessage);
     }
 }
 
