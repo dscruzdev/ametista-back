@@ -1,5 +1,5 @@
-const db = require("../model/db");
-const Comment = require('../model/mComment');
+const db = require("../models/db");
+const Comment = require('../models/mComment');
 
 exports.create = async (data, res) => {
     await db.sync();

@@ -1,5 +1,5 @@
-const db = require("../model/db");
-const LogStatusUser = require('../model/mLogStatusUser');
+const db = require("../models/db");
+const LogStatusUser = require('../models/mLogStatusUser');
 
 exports.create = async (data, res) => {
     await db.sync();

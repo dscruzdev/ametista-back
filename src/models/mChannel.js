@@ -1,15 +1,15 @@
 const Sequelize = require("sequelize");
 const database = require('./db');
 
-const Language = database.define('Language', {
+const Channel = database.define('Channel', {
     id:{
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
     },
-    language:{
+    channel:{
         type: Sequelize.STRING,
     },
 });
-module.exports = Language;
+module.exports = Channel;

@@ -3,6 +3,7 @@ const database = require("./db");
 const client = require('./mClient');
 const subject = require('./mSubject');
 const language = require('./mLanguage');
+const channel = require('./mChannel');
 
 const Request = database.define('Request', {
     id: {
@@ -54,7 +55,15 @@ const Request = database.define('Request', {
             key: 'id'
         }
 
+    },
+    Channels_id: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: channel,
+            key: 'id'
+        }
+
     }
-}, {
-    deletedAt: true
-})
+},)
+
+module.exports = Request;

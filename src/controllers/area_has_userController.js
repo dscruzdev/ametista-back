@@ -1,5 +1,5 @@
-const db = require("../model/db");
-const Area_has_User = require('../model/mArea_has_User');
+const db = require("../models/db");
+const Area_has_User = require('../models/mArea_has_User');
 
 exports.create = async (data, res) => {
     await db.sync();

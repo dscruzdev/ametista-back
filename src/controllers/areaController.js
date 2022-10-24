@@ -1,5 +1,5 @@
-const db = require("../model/db");
-const Area = require('../model/mArea');
+const db = require("../models/db");
+const Area = require('../models/mArea');
 
 exports.create = async (data, res) => {
     await db.sync();

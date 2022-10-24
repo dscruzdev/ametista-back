@@ -3,8 +3,9 @@ const { route } = require("express/lib/application");
 
 let router = express.Router();
 
-const requestController = require("../controllers/requestController");
+const requestService = require("../services/requestService");
 
-router.post("/",requestController.create);
+router.post("/",requestService.create);
+router.get("/",requestService.select);
 
 module.exports = router;

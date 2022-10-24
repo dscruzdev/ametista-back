@@ -1,5 +1,5 @@
-const db = require("../model/db");
-const User_has_Language = require('../model/mUser_has_Language');
+const db = require("../models/db");
+const User_has_Language = require('../models/mUser_has_Language');
 
 exports.create = async (data, res) => {
     await db.sync();

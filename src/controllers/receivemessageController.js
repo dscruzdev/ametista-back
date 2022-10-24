@@ -7,3 +7,7 @@ exports.receiveSMS = async () => {
 
     return await res.type('text/xml').send(twiml.toString());
 }
+
+exports.receiveWhatsapp = async () => {
+    
+}

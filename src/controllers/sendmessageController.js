@@ -42,9 +42,9 @@ exports.sendMessageEmail = async (msg) => {
 exports.sendMessageMessenger = async (from, to, body) => {
     return client.messages
         .create({
-            from: 'messenger:107247788842243',
-            body: 'Would you like to play a game?',
-            to: 'messenger:5439100306219328'
+            from: from,
+            body: body,
+            to: to
         })
         .then(message => { return message; });
 }

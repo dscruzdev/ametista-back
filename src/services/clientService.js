@@ -5,6 +5,7 @@ exports.create = async (req, res) => {
     //rules
     if (true) {
         client = await clientController.create(data, res);
+        client.dataValues.first_name = client.name.split(" ")[0];
         return res.status(201).json(client);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
@@ -12,7 +13,9 @@ exports.create = async (req, res) => {
 }
 
 exports.select = async (req, res) => {
-    data = req.body;
+    const { cpf, name, email, phone } = req.body;
+    //rules
+
     if (req.query.filter == undefined) {
         //We should create the 'filter' param to check if have filters and later get
         //all the params to filter the response
@@ -25,11 +28,34 @@ exports.select = async (req, res) => {
             return res.status(401).json({ 'message': 'Unauthorized' });
         }
     } else {
-        const filters = null; //We can build a filter object here
-        //rules
+        const filter = {
+            cpf: cpf ? cpf : null,
+            name: name ? name : null,
+            email: email ? email : null,
+            phone: phone ? phone : null
+        };
+
+        Object.keys(filter).forEach(key => {
+            if (filter[key] == null) {
+                delete filter[key];
+            }
+        });
         if (true) {
-            clients = await clientController.select(filters, res);
-            return res.status(200).json(clients);
+            clients = await clientController.select(filter, res);
+
+            switch (clients.length) {
+                case 0:
+                    return res.status(404).json({ 'message': 'No one register found' })
+                    break;
+                case 1:
+                    clients[0].dataValues.first_name = clients[0].name.split(" ")[0];
+                    return res.status(200).json(clients[0]);
+                default:
+                    return res.status(200).json(clients);
+                    break;
+            }
+
+           
         } else {
             return res.status(401).json({ 'message': 'Unauthorized' });
         }

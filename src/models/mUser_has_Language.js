@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 const database = require('./db.js');
 
-const user = ('./mUser.js');
-const language = ('./mLanguage.js');
+const user = require('./mUser');
+const language = require('./mLanguage');
 
 const User_has_Language = database.define('User_has_Language', {
     cpfUser:{

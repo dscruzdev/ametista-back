@@ -13,3 +13,8 @@ exports.receiveMessageSMS = async (req, res) => {
         res.status(200).json(sentMessage);
     }
 }
+
+exports.receiveMessageWhatsapp = async (req, res) => {
+    
+    return res.status(200).json(req.body);
+}

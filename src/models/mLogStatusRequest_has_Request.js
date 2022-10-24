@@ -1,6 +1,6 @@
 const Sequelize = require('Sequelize');
 const database = require('./db');
-const logstatus = require('./mLogStatusRequests');
+const logstatus = require('./mLogStatusRequest');
 const request = require('./mRequest');
 
 const LogStatusRequest_has_Request = database.define('LogStatusRequest_has_Request', {

@@ -1,5 +1,5 @@
-const db = require("../model/db");
-const Subject = require('../model/mSubject');
+const db = require("../models/db");
+const Subject = require('../models/mSubject');
 
 exports.create = async (data, res) => {
     await db.sync();
