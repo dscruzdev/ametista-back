@@ -27,7 +27,7 @@ const user_has_requestRoute = require("./src/routes/user_has_request");
 const chatbotRoute = require("./src/routes/chatbot");
 
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(express.json());
 

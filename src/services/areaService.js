@@ -2,7 +2,8 @@ const areaController = require("../controllers/areaController");
 
 exports.create = async (req, res) => {
     data = req.body;
-    //rules
+    //Só admin acessa aqui
+    //Não pode ser duplicado (não pode ter o mesmo nome)
     if (true) {
         area = await areaController.create(data, res);
         return res.status(201).json(area);

@@ -13,7 +13,7 @@ const User_has_Request = require("../models/mUser_has_Request");
 
 const clientService = require("../services/clientService");
 
-router.post("/", clientService.create);
+router.post("/", clientService.select);
 router.get("/", clientService.select);
 router.put("/:id", clientService.update);
 //router.delete("/:id", clientService.delete)

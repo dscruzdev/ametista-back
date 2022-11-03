@@ -1,13 +1,26 @@
 const clientController = require("../controllers/clientController");
+const requestController = require("../controllers/requestController");
 const fs = require("fs");
+const { json } = require("body-parser");
+const { Console } = require("console");
+const { match } = require("assert");
 
-exports.create = async (req, res) => {
-    data = req.body;
+exports.newclient = async (req, res) => {
+    data = req.body.body;
     //Não pode repetir email
     //Não pode repetir CPF
     //rules
+    const converted = JSON.parse(data);
+    // const converted = {
+    //     cpf: cpf.split("=")[1].split("}")[0],
+    //     name: name.split("=")[1].split("}")[0],
+    //     email: email.split("=")[1].split("}")[0],
+    //     phone: phone.split("=")[1].split("}")[0],
+    // }
     if (true) {
-        client = await clientController.create(data, res);
+        console.log("Ele quer criar um novo cliente");
+
+        client = await clientController.create(converted, res);
         client.dataValues.first_name = client.name.split(" ")[0];
         return res.status(201).json(client);
     } else {
@@ -15,18 +28,13 @@ exports.create = async (req, res) => {
     }
 }
 
-exports.select = async (req, res) => {
-    const { cpf, name, email, phone } = req.body;
+exports.findclient = async (req, res) => {
+    const body = req.body.body;
     //Somente Admin e atendente acessa aqui
 
     //rules
-    fs.writeFile('mynewfile.txt', req.rawHeaders.toString(), function (err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
-    console.log(req.body);
+    var converted = JSON.parse(body);
 
-    return res.status(418).json(req.body);
     if (req.query.filter == undefined) {
         //We should create the 'filter' param to check if have filters and later get
         //all the params to filter the response
@@ -39,15 +47,18 @@ exports.select = async (req, res) => {
             return res.status(401).json({ 'message': 'Unauthorized' });
         }
     } else {
+        console.log("With filter");
         const filter = {
-            cpf: cpf ? cpf : null,
-            name: name ? name : null,
-            email: email ? email : null,
-            phone: phone ? phone : null
+            cpf: converted.cpf ? converted.cpf : null,
+            name: converted.name ? converted.name : null,
+            email: converted.email ? converted.email : null,
+            phone: converted.phone ? converted.phone : null
         };
 
         Object.keys(filter).forEach(key => {
             if (filter[key] == null) {
+                console.log("Filter " + filter[key] + " has been deleted");
+
                 delete filter[key];
             }
         });
@@ -56,12 +67,15 @@ exports.select = async (req, res) => {
 
             switch (clients.length) {
                 case 0:
+                    console.log("Don't returned client");
                     return res.status(404).json({ 'message': 'No one register found' })
                     break;
                 case 1:
+                    console.log("Retuned 1 client");
                     clients[0].dataValues.first_name = clients[0].name.split(" ")[0];
                     return res.status(200).json(clients[0]);
                 default:
+                    console.log("Retuned list of clients");
                     return res.status(200).json(clients);
                     break;
             }
@@ -73,27 +87,14 @@ exports.select = async (req, res) => {
     }
 }
 
-exports.update = async (req, res) => {
-    //Somente o Admin e atendente
-    data = req.body;
-    data.cpf = req.params.id;
+exports.newrequest = async (req, res) => {
+    data = req.body.body;
+    const converted = JSON.parse(data);
+
     //rules
     if (true) {
-        client = clientController.update(data, res);
-        return res.status(200).json(client);
-
-    } else {
-        return res.status(401).json({ 'message': 'Unauthorized' });
-    }
-}
-
-exports.delete = async (req, res) => {
-    data.cpf = req.params.id;
-    //Ninguem exclui cliente
-    //rules
-    if (true) {
-        client = await clientController.delete(data, res);
-        return res.status(200).json(client);
+        request = await requestController.create(converted, res);
+        return res.status(201).json(request);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
     }

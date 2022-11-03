@@ -3,10 +3,11 @@ const { route } = require("express/lib/application");
 
 let router = express.Router();
 
-const ClientService = require("../services/ClientService");
+const chatbotService = require("../services/chatbotService");
 
-router.post("/", ClientService.select);
-router.post("/create", ClientService.create);
+router.post("/findclient", chatbotService.findclient);
+router.post("/newclient", chatbotService.newclient);
+router.post("/newrequest", chatbotService.newrequest);
 //router.delete("/:id", AreaService.delete)
 
 module.exports = router;
