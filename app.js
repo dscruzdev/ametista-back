@@ -31,7 +31,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(express.json());
 
-
+app.get("/", async (req, res) => {
+    return res.status(200).json({ "message": "oi joyce" });
+});
 app.use("/auth", authRoute);
 app.use("/send", sendmessage);
 app.use("/receive", receivemessage);

@@ -20,13 +20,9 @@ exports.select = async (req, res) => {
     //Somente Admin e atendente acessa aqui
 
     //rules
-    fs.writeFile('mynewfile.txt', req.rawHeaders.toString(), function (err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
+
     console.log(req.body);
 
-    return res.status(418).json(req.body);
     if (req.query.filter == undefined) {
         //We should create the 'filter' param to check if have filters and later get
         //all the params to filter the response
