@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const database = require('./db');
 
 const Channel = database.define('Channel', {
-    id:{
+    idChannels:{
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,

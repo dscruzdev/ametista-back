@@ -5,26 +5,18 @@ const user = require('./mUser');
 const request = require('./mRequest');
 
 const Comment = database.define('Comment',{
-    id: {
+    idComments: {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
-    Requests_id:{
+    IdRequests:{
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
             model: request,
-            key: 'id'
-        }
-    },
-    Users_cpf:{
-        type: Sequelize.STRING,
-        allowNull: false,
-        references: {
-            model: user,
-            key: 'cpf'
+            key: 'idRequests'
         }
     },
     comment: {

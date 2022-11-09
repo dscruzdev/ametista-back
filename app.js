@@ -2,6 +2,7 @@ const express = require('express');
 var bodyParser = require('body-parser')
 const app = express();
 const fs = require('fs');
+var cors = require('cors')
 
 
 require("dotenv").config();
@@ -25,8 +26,11 @@ const subjectRoute = require("./src/routes/subject");
 const user_has_languageRoute = require("./src/routes/user_has_language");
 const user_has_requestRoute = require("./src/routes/user_has_request");
 const chatbotRoute = require("./src/routes/chatbot");
+const frontRoute = require("./src/routes/front");
 
-
+app.use(cors({
+    origin: "*",
+}));
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(express.json());
@@ -39,6 +43,9 @@ app.use("/send", sendmessage);
 app.use("/receive", receivemessage);
 app.use("/request", requestRoute);
 app.use("/client", clientRoute);
+app.use("/language", languageRoute);
+app.use("/subject", subjectRoute);
+app.use("/front", frontRoute);
 app.use("/user", userRoute);
 app.use("/chatbot", chatbotRoute);
 app.get("/teste", async (req, res) => {

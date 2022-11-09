@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const database = require("./db");
 
 const User = database.define('User',{
-    cpf: {
+    cpfUsers: {
         type: Sequelize.STRING,
         allowNull: false,
         primaryKey: true

@@ -6,18 +6,18 @@ const language = require('./mLanguage');
 const channel = require('./mChannel');
 
 const Request = database.define('Request', {
-    id: {
+    idRequests: {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true
     },
-    Client_cpf: {
+    cpfClients: {
         type: Sequelize.STRING,
         allowNull: false,
         references: {
             model: client,
-            key: 'cpf'
+            key: 'cpfClients'
         }
     },
     category: {
@@ -45,24 +45,33 @@ const Request = database.define('Request', {
         type: Sequelize.INTEGER,
         references: {
             model: language,
-            key: 'id'
+            key: 'idLanguages'
         }
     },
     idSubject: {
         type: Sequelize.INTEGER,
         references: {
             model: subject,
-            key: 'id'
+            key: 'idSubjects'
         }
 
     },
-    Channels_id: {
+    idChannels: {
         type: Sequelize.INTEGER,
         references: {
             model: channel,
-            key: 'id'
+            key: 'idChannels'
         }
 
+    },
+    CSAT:{
+        type: Sequelize.INTEGER
+    },
+    CES:{
+        type: Sequelize.INTEGER
+    },
+    NPS:{
+        type: Sequelize.INTEGER
     }
 },)
 

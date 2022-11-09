@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const database = require('./db');
 
 const Subject = database.define('Subject', {
-    id:{
+    idSubjects:{
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,

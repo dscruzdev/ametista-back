@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const database = require('./db');
 
 const Area = database.define('Area', {
-    id:{
+    idAreas:{
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,

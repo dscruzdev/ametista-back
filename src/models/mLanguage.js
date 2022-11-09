@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const database = require('./db');
 
 const Language = database.define('Language', {
-    id:{
+    idLanguages:{
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,

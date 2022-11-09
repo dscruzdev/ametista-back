@@ -4,20 +4,20 @@ const logstatus = require('./mLogStatusRequest');
 const request = require('./mRequest');
 
 const LogStatusRequest_has_Request = database.define('LogStatusRequest_has_Request', {
-    idLogStatus:{
+    idLogStatusRequests:{
         type: Sequelize.INTEGER,
         allowNull: false,
         references:{
             model: logstatus,
-            key: 'id'
+            key: 'idLogStatusRequests'
         }
     },
-    idRequest: {
+    idRequests: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references:{
             model: request,
-            key: 'id'
+            key: 'idRequests'
         }
     }
 });

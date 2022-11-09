@@ -1,5 +1,6 @@
 const db = require("../models/db");
 const Language = require("../models/mLanguage");
+const { Op } = require("sequelize");
 
 exports.create = async (data, res) => {
     await db.sync();
@@ -21,12 +22,29 @@ exports.select = async (filters = null, res) => {
         await db.sync();
         response = await Language.findAll({
             where: {
-                'filter.param': 'filter.value' //out of '
+                filters
             }
         });
         return response;
     }
+}
 
+exports.selectOr = async (filters = null, res) => {
+    if (filters == null) {
+        await db.sync();
+        response = await Language.findAll();
+        return response;
+    } else {
+        //separate the filters here
+        //We can build the filter out of the function and just put in findAll later
+        await db.sync();
+        response = await Language.findAll({
+            where: {
+                [Op.or]:filters.data
+            }
+        });
+        return response;
+    }
 }
 
 exports.update = async (data, res) => {

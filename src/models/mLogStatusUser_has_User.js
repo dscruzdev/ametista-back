@@ -1,23 +1,23 @@
 const Sequelize = require('sequelize');
 const database = require('./db');
-const client = require('./mClient');
+const user = require('./mUser');
 const logstatususer = require('./mLogStatusUser');
 
 const LogStatusUser_has_User = database.define('LogStatusUser_has_User', {
-    idLogStatus: {
+    idLogStatusUser_has_Users: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
             model: logstatususer,
-            key: 'idLogStatus'
+            key: 'idLogStatusUsers'
         }
     },
-    User_cpf: {
+    cpfUsers: {
         type: Sequelize.STRING,
         allowNull: false,
         references: {
-            model: client,
-            key: 'cpf'
+            model: user,
+            key: 'cpfUsers'
         },
     }
 });

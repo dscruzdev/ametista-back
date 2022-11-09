@@ -5,20 +5,20 @@ const user = require('./mUser');
 const request = require('./mRequest');
 
 const User_has_Request = database.define('User_has_Request', {
-    User_cpf: {
+    cpfUsers: {
         type: Sequelize.STRING,
         allowNull: false,
         references: {
             model: user,
-            key: 'cpf'
+            key: 'cpfUsers'
         }
     },
-    Request_id: {
+    idRequests: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
             model: request,
-            key: 'id'
+            key: 'idRequests'
         }
     },
 });

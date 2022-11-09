@@ -3,7 +3,7 @@ const database = require("./db");
 
 const Client = database.define('Client',
     {
-        cpf: {
+        cpfClients: {
             type: Sequelize.STRING,
             allowNull: false,
             primaryKey: true

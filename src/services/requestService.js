@@ -1,4 +1,5 @@
 const requestController = require("../controllers/requestController");
+const { Op } = require("sequelize");
 
 exports.create = async (req, res) => {
     data = req.body;

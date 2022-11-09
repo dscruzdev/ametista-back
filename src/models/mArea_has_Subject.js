@@ -5,20 +5,20 @@ const area = require('./mArea');
 const subject = require('./mSubject');
 
 const Area_has_Subject = database.define('Area_has_Subject', {
-    Area_id: {
+    idAreas: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
             model: area,
-            key: 'id',
+            key: 'idAreas',
         }
     },
-    Subject_id: {
+    idSubjects: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
             model: subject,
-            key: 'id',
+            key: 'idSubjects',
         }
     }
 });

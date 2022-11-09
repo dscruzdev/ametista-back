@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const database = require('./db');
 
 const LogStatusRequest = database.define('LogStatusRequest', {
-    id:{
+    idLogStatusRequests:{
         type:Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,

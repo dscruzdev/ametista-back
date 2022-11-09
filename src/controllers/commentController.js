@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const db = require("../models/db");
 const Comment = require('../models/mComment');
 
@@ -22,12 +23,29 @@ exports.select = async (filters = null, res) => {
         await db.sync();
         response = await Comment.findAll({
             where: {
-                'filter.param': 'filter.value' //out of '
+                filters //out of '
             }
         });
         return response;
     }
+}
 
+exports.selectOr = async (filters = null, res) => {
+    if (filters == null) {
+        await db.sync();
+        response = await Comment.findAll();
+        return response;
+    } else {
+        //separate the filters here
+        //We can build the filter out of the function and just put in findAll later
+        await db.sync();
+        response = await Comment.findAll({
+            where: {
+                [Op.or]:filters.data //out of '
+            }
+        });
+        return response;
+    }
 }
 
 exports.update = async (data, res) => {
