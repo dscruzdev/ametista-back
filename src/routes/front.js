@@ -14,6 +14,7 @@ const User_has_Request = require("../models/mUser_has_Request");
 const frontService = require("../services/frontService");
 
 router.get("/chat", frontService.chat);
+router.get("/requests", frontService.requests);
 router.put("/chat", frontService.updateinfos);
 router.post("/chat", frontService.endrequest);
 router.post("/chat/comment", frontService.makecomment);

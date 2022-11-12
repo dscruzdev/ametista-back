@@ -32,7 +32,7 @@ const Request = database.define('Request', {
 
     },
     deadline: {
-        type: 'TIMESTAMP'
+        type: 'TIMESTAMP',
     },
     priority: {
         type: Sequelize.INTEGER
@@ -72,6 +72,9 @@ const Request = database.define('Request', {
     },
     NPS:{
         type: Sequelize.INTEGER
+    },
+    SID:{
+        type: Sequelize.STRING
     }
 },)
 
