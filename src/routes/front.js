@@ -16,7 +16,7 @@ const frontService = require("../services/frontService");
 router.get("/chat", frontService.chat);
 router.get("/requests", frontService.requests);
 router.put("/chat", frontService.updateinfos);
-router.post("/chat", frontService.endrequest);
+router.put("/request/endrequest", frontService.endrequest);
 router.post("/chat/comment", frontService.makecomment);
 //router.delete("/:id", clientService.delete)
 
