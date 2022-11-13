@@ -170,11 +170,15 @@ exports.endrequest = async (req, res) => {
         ('00' + date.getUTCSeconds()).slice(-2);
     console.log(date);
 
-    return res.status(418).json(date);
-
     //body = { endedAt: }
+    data = {
+        endedAt: date,
+        status: 'Fechado',
+        idRequests: body.idRequests
+    }
+    const request = await requestController.update(data, res);
 
-    //const request = await requestController.update()
+    return res.status(201).json(request);
 }
 
 exports.requests = async (req, res) => {

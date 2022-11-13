@@ -1,5 +1,6 @@
 const conversationController = require('../controllers/conversationController');
 const userController = require('../controllers/userController');
+const requestController = require('../controllers/requestController');
 const sgMail = require('@sendgrid/mail')
 const whatsappnumber = process.env.WHATSAPPNUMBER;
 const smsnumber = process.env.SMSNUMBER;
@@ -52,7 +53,11 @@ const fbid = process.env.FBPAGEID;
 exports.sendMessageMessenger = async (req, res) => {
     const {user, idRequests, body} = req.body;
 
-    author = userController.selectOne({uid: user});
+    author = await userController.selectOne({uid: user});
+
+    first_name = author.name.split(" ")[0];
+
+    request = await requestController.select({idRequests: idRequests});
 
     to = 'messenger:' + data.to; // Change to your recipient
     author = 'messenger:' + fbid; // Change to your verified sender
@@ -61,7 +66,7 @@ exports.sendMessageMessenger = async (req, res) => {
 
     //Rules
     if (true) {
-        sentMessage = await conversationController.sendMessage(author, sid, body);
+        sentMessage = await conversationController.sendMessage(first_name, sid, body);
 
         return res.status(200).json(sentMessage);
 
