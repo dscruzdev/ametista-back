@@ -171,13 +171,17 @@ exports.endrequest = async (req, res) => {
     console.log(date);
 
     //body = { endedAt: }
-    data = {
-        endedAt: date,
-        status: 'Fechado',
-        idRequests: body.idRequests
-    }
-    const request = await requestController.update(data, res);
-
+    const request = [];
+    const idRequests = body.idRequests.split(",");
+    console.log(body.idRequests);
+    idRequests.forEach(async (idRequest) => {
+        data = {
+            endedAt: date,
+            status: 'Fechado',
+            idRequests: idRequest
+        }
+        request.push(requestController.update(data, res));
+    });
     return res.status(201).json(request);
 }
 
