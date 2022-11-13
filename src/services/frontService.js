@@ -174,7 +174,7 @@ exports.endrequest = async (req, res) => {
     const request = [];
     const idRequests = body.idRequests.split(",");
     console.log(body.idRequests);
-    idRequests.forEach(async (idRequest) => {
+    idRequests.forEach((idRequest) => {
         data = {
             endedAt: date,
             status: 'Fechado',
@@ -201,7 +201,7 @@ exports.requests = async (req, res) => {
         })
         request.dataValues.subject = varforsubject
     });
-    
+
 
     return res.status(200).json(requests);
 
