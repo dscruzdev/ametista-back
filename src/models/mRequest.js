@@ -70,6 +70,9 @@ const Request = database.define('Request', {
     },
     NPS:{
         type: Sequelize.INTEGER
+    },
+    SID:{
+        type: Sequelize.STRING
     }
 },)
 

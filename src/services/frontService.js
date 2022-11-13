@@ -125,7 +125,7 @@ exports.chat = async (req, res) => {
     }
 }
 
-exports.updateinfos = async (res, req) => {
+exports.updateinfos = async (req, res) => {
     const { cpfClients, name, email, subject, language, idRequests } = req.body;
 
     const clientbody = {
@@ -149,7 +149,7 @@ exports.updateinfos = async (res, req) => {
 
 }
 
-exports.makecomment = async (res, req) => {
+exports.makecomment = async (req, res) => {
     const body = req.body;
 
     const comments = await commentController.create(body, res);
@@ -157,7 +157,7 @@ exports.makecomment = async (res, req) => {
     return res.status(201).json(comments);
 }
 
-exports.endrequest = async (res, req) => {
+exports.endrequest = async (req, res) => {
     const body = req.body;
 
     var date;
@@ -170,9 +170,39 @@ exports.endrequest = async (res, req) => {
         ('00' + date.getUTCSeconds()).slice(-2);
     console.log(date);
 
-    return res.status(418).json(date);
-
     //body = { endedAt: }
+    const request = [];
+    const idRequests = body.idRequests.split(",");
+    console.log(body.idRequests);
+    idRequests.forEach(async (idRequest) => {
+        data = {
+            endedAt: date,
+            status: 'Fechado',
+            idRequests: idRequest
+        }
+        request.push(requestController.update(data, res));
+    });
+    return res.status(201).json(request);
+}
 
-    //const request = await requestController.update()
+exports.requests = async (req, res) => {
+    const body = req.body;
+
+    const requests = await requestController.select();
+
+    const subjects = await subjectController.select();
+
+    requests.forEach(request => {
+        var varforsubject;
+        subjects.forEach(data3 => {
+            if (data3.idSubjects == request.idSubject) {
+                varforsubject = data3.name;
+            }
+        })
+        request.dataValues.subject = varforsubject
+    });
+    
+
+    return res.status(200).json(requests);
+
 }

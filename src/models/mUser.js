@@ -22,6 +22,11 @@ const User = database.define('User',{
     user_level: {
         type: Sequelize.INTEGER,
     },
+    uid: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false,
+    }
 });
 
 module.exports = User;

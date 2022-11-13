@@ -5,7 +5,7 @@ const Request = require('../models/mRequest');
 exports.create = async (data, res) => {
     await db.sync();
     response = await Request.create({
-        Client_cpf: data.Client_cpf,
+        cpfClients: data.cpfClients,
         category: data.category,
         endedAt: data.endedAt,
         description: data.description,
@@ -67,7 +67,7 @@ exports.selectOr2 = async (filters = null, res) => {
 }
 
 exports.update = async (data, res) => {
-    const tochange = await Request.findByPk(data.cpf);
+    const tochange = await Request.findByPk(data.idRequests);
     tochange.category = data.category ? data.category : tochange.category;
     tochange.endedAt = data.endedAt ? data.endedAt : tochange.endedAt;
     tochange.description = data.description ? data.description : tochange.description;

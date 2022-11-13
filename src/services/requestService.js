@@ -1,11 +1,18 @@
 const requestController = require("../controllers/requestController");
+const conversationController = require("../controllers/conversationController");
+
 const { Op } = require("sequelize");
 
 exports.create = async (req, res) => {
     data = req.body;
+    //return res.status(418).json(data);
     //rules
     if (true) {
+        var sid;
         request = await requestController.create(data, res);
+        sid = await conversationController.newConversation(request.idRequests);
+        request.set({SID:sid});
+        await request.save();
         return res.status(201).json(request);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
@@ -63,7 +70,7 @@ exports.select = async (req, res) => {
 
 exports.update = async (req, res) => {
     data = req.body;
-    data.cpf = req.params.id;
+    data.cpfClients = req.params.id;
     //rules
     if (true) {
         request = requestController.update(data, res);

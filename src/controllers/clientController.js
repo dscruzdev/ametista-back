@@ -6,7 +6,7 @@ const { Op } = require('sequelize');
 exports.create = async (data, res) => {
     await db.sync();
     response = await client.create({
-        cpf: data.cpf,
+        cpfClients: data.cpfClients,
         name: data.name,
         email: data.email,
         phone: data.phone

@@ -27,6 +27,7 @@ const user_has_languageRoute = require("./src/routes/user_has_language");
 const user_has_requestRoute = require("./src/routes/user_has_request");
 const chatbotRoute = require("./src/routes/chatbot");
 const frontRoute = require("./src/routes/front");
+const conversationRoute = require("./src/routes/conversation");
 
 app.use(cors({
     origin: "*",
@@ -48,6 +49,7 @@ app.use("/subject", subjectRoute);
 app.use("/front", frontRoute);
 app.use("/user", userRoute);
 app.use("/chatbot", chatbotRoute);
+app.use("/conversation", conversationRoute);
 app.get("/teste", async (req, res) => {
 
     fs.writeFile('helloworld.txt', req.body, function (err) {

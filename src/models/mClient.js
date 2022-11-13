@@ -16,6 +16,11 @@ const Client = database.define('Client',
         },
         phone: {
             type: Sequelize.STRING,
+        },
+        uid: {
+            type: Sequelize.UUID,
+            defaultValue: Sequelize.UUIDV4,
+            allowNull: false,
         }
     }
 )
