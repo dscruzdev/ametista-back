@@ -31,9 +31,7 @@ const Request = database.define('Request', {
         type: Sequelize.STRING,
 
     },
-    deadline: {
-        type: 'TIMESTAMP',
-    },
+  
     priority: {
         type: Sequelize.INTEGER
     },
