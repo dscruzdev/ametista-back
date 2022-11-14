@@ -3,6 +3,7 @@ const requestController = require("../controllers/requestController");
 const commentController = require("../controllers/commentController");
 const languageController = require("../controllers/languageController");
 const subjectController = require("../controllers/subjectController");
+const date_n_time = require('date-and-time');
 const { Op } = require("sequelize");
 
 exports.chat = async (req, res) => {
@@ -192,6 +193,8 @@ exports.requests = async (req, res) => {
 
     const subjects = await subjectController.select();
 
+    const clients = await clientController.select();
+
     requests.forEach(request => {
         var varforsubject;
         subjects.forEach(data3 => {
@@ -199,7 +202,20 @@ exports.requests = async (req, res) => {
                 varforsubject = data3.name;
             }
         })
-        request.dataValues.subject = varforsubject
+        var varforclient;
+        clients.forEach(data3 => {
+            if (data3.cpfClients == request.cpfClients) {
+                varforclient = data3.name;
+            }
+        });
+        var date = new Date(request.dataValues.createdAt);
+        //temp_order_date[2] = temp_order_date[2].split("T");
+        const order_date = date_n_time.format(date, "DD/MM/YYYY");
+        const order_time = date_n_time.format(date, "HH:mm");
+        request.dataValues.subject = varforsubject;
+        request.dataValues.client = varforclient;
+        request.dataValues.order_date = order_date;
+        request.dataValues.order_time = order_time;
     });
 
 
