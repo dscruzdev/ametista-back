@@ -40,6 +40,7 @@ app.get("/", async (req, res) => {
     return res.status(200).json({ "message": "oi joyce" });
 });
 app.use("/auth", authRoute);
+app.use("/area", areaRoute);
 app.use("/send", sendmessage);
 app.use("/receive", receivemessage);
 app.use("/request", requestRoute);
