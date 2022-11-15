@@ -60,9 +60,9 @@ exports.update = async (data, res) => {
 }
 
 exports.delete = async (data, res) => {
-    return client.destroy({
+    return Subject.destroy({
         where: {
-            id: data.id
+            idSubjects: data.idSubjects
         }
     });
 

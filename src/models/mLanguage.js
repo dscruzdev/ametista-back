@@ -11,5 +11,5 @@ const Language = database.define('Language', {
     language:{
         type: Sequelize.STRING,
     },
-});
+}, { paranoid: true });
 module.exports = Language;

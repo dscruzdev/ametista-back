@@ -60,7 +60,7 @@ exports.update = async (data, res) => {
 exports.delete = async (data, res) => {
     return Language.destroy({
         where: {
-            id: data.id
+            idLanguages: data.idLanguages
         }
     });
 
