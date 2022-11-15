@@ -22,6 +22,6 @@ const Comment = database.define('Comment',{
     comment: {
         type: Sequelize.STRING,
     }
-});
+},{ paranoid: true });
 
 module.exports = Comment;

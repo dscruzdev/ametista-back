@@ -22,7 +22,7 @@ const Client = database.define('Client',
             defaultValue: Sequelize.UUIDV4,
             allowNull: false,
         }
-    }
+    },{ paranoid: true }
 )
 
 module.exports = Client;
