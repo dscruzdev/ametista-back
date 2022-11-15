@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const database = require('./db');
 
 const Subject = database.define('Subject', {
-    idSubjects:{
+    idSubjects: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -14,6 +14,7 @@ const Subject = database.define('Subject', {
     category: {
         type: Sequelize.STRING,
     }
-});
+
+}, { paranoid: true });
 
 module.exports = Subject;

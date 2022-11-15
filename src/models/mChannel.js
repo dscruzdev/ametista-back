@@ -11,5 +11,5 @@ const Channel = database.define('Channel', {
     channel:{
         type: Sequelize.STRING,
     },
-});
+},{ paranoid: true });
 module.exports = Channel;

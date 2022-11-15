@@ -8,6 +8,6 @@ const LanguageService = require("../services/LanguageService");
 router.post("/", LanguageService.create);
 router.get("/", LanguageService.select);
 router.put("/:id", LanguageService.update);
-//router.delete("/:id", LanguageService.delete)
+router.delete("/:id", LanguageService.delete)
 
 module.exports = router;

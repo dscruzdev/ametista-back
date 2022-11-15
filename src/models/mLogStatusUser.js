@@ -11,6 +11,6 @@ const LogStatusUser = database.define('LogStatusUser', {
     status: {
         type: Sequelize.STRING,
     }
-});
+},{ paranoid: true });
 
 module.exports = LogStatusUser;

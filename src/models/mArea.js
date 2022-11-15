@@ -11,6 +11,6 @@ const Area = database.define('Area', {
     name: {
         type: Sequelize.STRING,
     }
-});
+}, { paranoid: true });
 
 module.exports = Area;

@@ -38,7 +38,7 @@ exports.select = async (req, res) => {
 
 exports.update = async (req, res) => {
     data = req.body;
-    data.cpf = req.params.id;
+    data.idLanguages = req.params.id;
     //rules
     if (true) {
         language = languageController.update(data, res);
@@ -50,7 +50,8 @@ exports.update = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-    data.cpf = req.params.id;
+    const data = {};
+    data.idLanguages = req.params.id;
     //rules
     if (true) {
         language = await languageController.delete(data, res);

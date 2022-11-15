@@ -1,6 +1,6 @@
 const userController = require('../controllers/userController');
-const jwt = require('./jwtService');
-
+const jwt = require('jsonwebtoken');
+const SECRET = process.env.JWTTOKEN;
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
@@ -9,21 +9,25 @@ exports.login = async (req, res) => {
         password: password ? password : null,
     }
     var response = await userController.selectOne(filter, res);
-    const now = Date.now();
-    token = await jwt.encode({
-        cpf:response.cpf,
-        when:now,
-        from:req.rawHeaders
-    });
+    if (response) {
+        const now = Date.now();
+        const token = jwt.sign({
+            uid: response.uid,
+            when: now,
+            from: req.rawHeaders
+        }, SECRET, {expiresIn:300});
 
-    return res.status(200).json(token);
+        return res.status(200).json({"status":"Authenticated","token":token});
+    }else{
+        return res.status(404).json({"message":"Usuário não encontrado", "status":404});
+    }
 }
 
 exports.info = async (req, res) => {
-    const {token} = req.body;
+    const token = req.headers['x-token'];
 
-    // decoded = await jwt.decode(token);
+    decoded = jwt.decode(token);
 
-    return res.status(418).json(req.cpf);
+    return res.status(200).json(decoded);
 
 }

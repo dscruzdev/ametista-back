@@ -11,6 +11,6 @@ const LogStatusRequest = database.define('LogStatusRequest', {
     status:{
         type: Sequelize.STRING,
     },
-});
+},{ paranoid: true });
 
 module.exports = LogStatusRequest;

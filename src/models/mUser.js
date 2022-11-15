@@ -27,6 +27,6 @@ const User = database.define('User',{
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
     }
-});
+},{ paranoid: true });
 
 module.exports = User;

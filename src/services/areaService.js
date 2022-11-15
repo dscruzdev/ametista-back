@@ -39,7 +39,7 @@ exports.select = async (req, res) => {
 
 exports.update = async (req, res) => {
     data = req.body;
-    data.cpf = req.params.id;
+    data.idAreas = req.params.id;
     //rules
     if (true) {
         area = areaController.update(data, res);
@@ -51,7 +51,8 @@ exports.update = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-    data.cpf = req.params.id;
+    const data = {};
+    data.idAreas = req.params.id;
     //rules
     if (true) {
         area = await areaController.delete(data, res);

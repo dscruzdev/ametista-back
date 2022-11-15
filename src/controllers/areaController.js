@@ -42,7 +42,7 @@ exports.update = async (data, res) => {
 exports.delete = async (data, res) => {
     return Area.destroy({
         where: {
-            id: data.id
+            idAreas: data.idAreas
         }
     });
 

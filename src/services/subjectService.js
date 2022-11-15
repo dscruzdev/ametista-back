@@ -41,7 +41,7 @@ exports.select = async (req, res) => {
 
 exports.update = async (req, res) => {
     data = req.body;
-    data.cpf = req.params.id;
+    data.idSubjects = req.params.id;
     //rules
     if (true) {
         subject = await subjectController.update(data, res);
@@ -53,7 +53,8 @@ exports.update = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-    data.cpf = req.params.id;
+    const data = {};
+    data.idSubjects = req.params.id;
     //rules
     if (true) {
         subject = await subjectController.delete(data, res);

@@ -8,6 +8,6 @@ const AreaService = require("../services/AreaService");
 router.post("/", AreaService.create);
 router.get("/", AreaService.select);
 router.put("/:id", AreaService.update);
-//router.delete("/:id", AreaService.delete)
+router.delete("/:id", AreaService.delete)
 
 module.exports = router;
