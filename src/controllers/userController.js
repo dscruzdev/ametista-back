@@ -5,7 +5,7 @@ const User = require('../models/mUser');
 exports.create = async (data, res) => {
     await db.sync();
     response = await User.create({
-        cpf: data.cpf,
+        cpfUsers: data.cpfUsers,
         name: data.name,
         email: data.email,
         password: data.password,
