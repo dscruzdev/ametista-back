@@ -1,10 +1,13 @@
 const subjectController = require("../controllers/subjectController");
+const area_has_subjectController = require("../controllers/area_has_subjectController");
 
 exports.create = async (req, res) => {
     data = req.body;
+    var tocreate = {name:data.name}
     //rules
     if (true) {
-        subject = await subjectController.create(data, res);
+        subject = await subjectController.create(tocreate, res);
+        data.areas.forEach((area) => {area_has_subjectController.create({idSubjects: subject.dataValues.idSubjects, idAreas: area.value})})
         return res.status(201).json(subject);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });

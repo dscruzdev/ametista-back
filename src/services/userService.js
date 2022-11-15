@@ -69,7 +69,8 @@ exports.update = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-    data.cpf = req.params.id;
+    const data = {};
+    data.cpfUsers = req.params.id;
     //rules
     if (true) {
         user = await userController.delete(data, res);

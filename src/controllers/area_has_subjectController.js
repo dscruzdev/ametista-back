@@ -4,8 +4,8 @@ const Area_has_Subject = require('../models/mArea_has_Subject');
 exports.create = async (data, res) => {
     await db.sync();
     response = await Area_has_Subject.create({
-        Area_id: data.Area_id,
-        Subject_id: data.Subject_id,
+        idAreas: data.idAreas,
+        idSubjects: data.idSubjects,
     });
     return response;
 }

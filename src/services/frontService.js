@@ -1,5 +1,7 @@
 const clientController = require("../controllers/clientController");
 const areaController = require("../controllers/areaController");
+const area_has_userController = require("../controllers/area_has_userController");
+const userController = require("../controllers/userController");
 const requestController = require("../controllers/requestController");
 const commentController = require("../controllers/commentController");
 const languageController = require("../controllers/languageController");
@@ -255,7 +257,7 @@ exports.others = async (req, res) => {
     })
 
     languages.forEach(language => {
-        language.dataValues.type = "Idioma"; 
+        language.dataValues.type = "Idioma";
         var date = new Date(language.dataValues.createdAt);
         language.dataValues.createddate_on = date_n_time.format(date, "DD/MM/YYYY");
         language.dataValues.createdtime_on = date_n_time.format(date, "HH:mm");
@@ -263,5 +265,36 @@ exports.others = async (req, res) => {
     })
 
     return res.status(200).json(others);
+}
 
+exports.employees = async (req, res) => {
+    const body = req.body;
+
+    const users = await userController.select();
+
+    const areas = await areaController.select();
+
+    const area_has_users = await area_has_userController.select();
+
+
+
+    users.forEach(user => {
+        user.dataValues.area = "";
+        area_has_users.forEach(area_has_user => {
+            areas.forEach(area => {
+                if (area.idAreas == area_has_user.idAreas && user.cpfUsers == area_has_user.cpfUsers) { 
+                    user.dataValues.area += area.name+", ";
+                }
+            });
+        }
+        )
+        var date = new Date(user.dataValues.createdAt);
+        //temp_order_date[2] = temp_order_date[2].split("T");
+        const order_date = date_n_time.format(date, "DD/MM/YYYY");
+        const order_time = date_n_time.format(date, "HH:mm");
+        user.dataValues.order_date = order_date;
+        user.dataValues.order_time = order_time;
+        user.dataValues.area = user.dataValues.area.slice(0,user.dataValues.area.length-2);
+    });
+    return res.status(200).json(users);
 }

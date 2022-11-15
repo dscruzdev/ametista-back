@@ -58,9 +58,9 @@ exports.update = async (data, res) => {
 }
 
 exports.delete = async (data, res) => {
-    return client.destroy({
+    return User.destroy({
         where: {
-            cpf: data.cpf
+            cpfUsers: data.cpfUsers
         }
     });
 
