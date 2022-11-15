@@ -1,4 +1,5 @@
 const clientController = require("../controllers/clientController");
+const areaController = require("../controllers/areaController");
 const requestController = require("../controllers/requestController");
 const commentController = require("../controllers/commentController");
 const languageController = require("../controllers/languageController");
@@ -220,5 +221,47 @@ exports.requests = async (req, res) => {
 
 
     return res.status(200).json(requests);
+
+}
+
+exports.others = async (req, res) => {
+    const body = req.body;
+
+    const areas = await areaController.select();
+
+    const subjects = await subjectController.select();
+
+    const languages = await languageController.select();
+
+    const others = [
+
+    ];
+
+    areas.forEach(area => {
+        area.dataValues.type = "Área";
+        var date = new Date(area.dataValues.createdAt);
+        area.dataValues.createddate_on = date_n_time.format(date, "DD/MM/YYYY");
+        area.dataValues.createdtime_on = date_n_time.format(date, "HH:mm");
+        others.push(area);
+    });
+
+
+    subjects.forEach(subject => {
+        subject.dataValues.type = "Assunto";
+        var date = new Date(subject.dataValues.createdAt);
+        subject.dataValues.createddate_on = date_n_time.format(date, "DD/MM/YYYY");
+        subject.dataValues.createdtime_on = date_n_time.format(date, "HH:mm");
+        others.push(subject)
+    })
+
+    languages.forEach(language => {
+        language.dataValues.type = "Idioma"; 
+        var date = new Date(language.dataValues.createdAt);
+        language.dataValues.createddate_on = date_n_time.format(date, "DD/MM/YYYY");
+        language.dataValues.createdtime_on = date_n_time.format(date, "HH:mm");
+        others.push(language)
+    })
+
+    return res.status(200).json(others);
 
 }

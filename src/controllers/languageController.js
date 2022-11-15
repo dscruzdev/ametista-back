@@ -5,7 +5,7 @@ const { Op } = require("sequelize");
 exports.create = async (data, res) => {
     await db.sync();
     response = await Language.create({
-        name: data.name,
+        language: data.language,
 
     });
     return response;
