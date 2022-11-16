@@ -49,7 +49,7 @@ exports.selectOr = async (filters = null, res) => {
 }
 
 exports.update = async (data, res) => {
-    const tochange = await Subject.findByPk(data.id);
+    const tochange = await Subject.findByPk(data.idSubjects);
     tochange.name = data.name ? data.name : tochange.name;
     tochange.category = data.category ? data.category : tochange.category;
     

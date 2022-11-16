@@ -48,11 +48,9 @@ exports.selectOr = async (filters = null, res) => {
 }
 
 exports.update = async (data, res) => {
-    const tochange = await Language.findByPk(data.id);
-    tochange.name = data.name ? data.name : tochange.name;
-
+    const tochange = await Language.findByPk(data.idLanguages);
+    tochange.language = data.language ? data.language : tochange.language;
     response = await tochange.save();
-
     return response;
 
 }

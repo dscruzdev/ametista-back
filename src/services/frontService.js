@@ -1,6 +1,7 @@
 const clientController = require("../controllers/clientController");
 const areaController = require("../controllers/areaController");
 const area_has_userController = require("../controllers/area_has_userController");
+const area_has_subjectController = require("../controllers/area_has_subjectController");
 const userController = require("../controllers/userController");
 const requestController = require("../controllers/requestController");
 const commentController = require("../controllers/commentController");
@@ -231,6 +232,8 @@ exports.others = async (req, res) => {
 
     const areas = await areaController.select();
 
+    const area_has_subjects = await area_has_subjectController.select();
+
     const subjects = await subjectController.select();
 
     const languages = await languageController.select();
@@ -246,13 +249,24 @@ exports.others = async (req, res) => {
         area.dataValues.createdtime_on = date_n_time.format(date, "HH:mm");
         others.push(area);
     });
-
-
+    
     subjects.forEach(subject => {
+        const subjectareas = [];
+        area_has_subjects.forEach(area_has_subject => {
+            if (area_has_subject.idSubjects == subject.idSubjects) {
+                areas.forEach(area => {
+                    if (area.idAreas == area_has_subject.idAreas) {
+                        subjectareas.push({value:area.idAreas,label:area.name});
+                    }
+                });
+
+            }
+        });
         subject.dataValues.type = "Assunto";
         var date = new Date(subject.dataValues.createdAt);
         subject.dataValues.createddate_on = date_n_time.format(date, "DD/MM/YYYY");
         subject.dataValues.createdtime_on = date_n_time.format(date, "HH:mm");
+        subject.dataValues.areas = subjectareas;
         others.push(subject)
     })
 
@@ -282,8 +296,8 @@ exports.employees = async (req, res) => {
         user.dataValues.area = "";
         area_has_users.forEach(area_has_user => {
             areas.forEach(area => {
-                if (area.idAreas == area_has_user.idAreas && user.cpfUsers == area_has_user.cpfUsers) { 
-                    user.dataValues.area += area.name+", ";
+                if (area.idAreas == area_has_user.idAreas && user.cpfUsers == area_has_user.cpfUsers) {
+                    user.dataValues.area += area.name + ", ";
                 }
             });
         }
@@ -294,7 +308,7 @@ exports.employees = async (req, res) => {
         const order_time = date_n_time.format(date, "HH:mm");
         user.dataValues.order_date = order_date;
         user.dataValues.order_time = order_time;
-        user.dataValues.area = user.dataValues.area.slice(0,user.dataValues.area.length-2);
+        user.dataValues.area = user.dataValues.area.slice(0, user.dataValues.area.length - 2);
     });
     return res.status(200).json(users);
 }

@@ -43,7 +43,7 @@ exports.selectOne = async (filters = null, res) => {
 
 
 exports.update = async (data, res) => {
-    const tochange = await User.findByPk(data.cpf);
+    const tochange = await User.findByPk(data.cpfUsers);
     tochange.name = data.name ? data.name : tochange.name;
     tochange.email = data.email ? data.email : tochange.email;
     tochange.password = data.password ? data.password : tochange.password;

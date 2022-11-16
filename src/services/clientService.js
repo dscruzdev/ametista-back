@@ -73,7 +73,7 @@ exports.select = async (req, res) => {
 exports.update = async (req, res) => {
     //Somente o Admin e atendente
     data = req.body;
-    data.cpf = req.params.id;
+    data.cpfClients = req.params.id;
     //rules
     if (true) {
         client = clientController.update(data, res);
@@ -85,7 +85,8 @@ exports.update = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-    data.cpf = req.params.id;
+    const data = {};
+    data.cpfClients = req.params.id;
     //Ninguem exclui cliente
     //rules
     if (true) {

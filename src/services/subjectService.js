@@ -7,7 +7,7 @@ exports.create = async (req, res) => {
     //rules
     if (true) {
         subject = await subjectController.create(tocreate, res);
-        data.areas.forEach((area) => {area_has_subjectController.create({idSubjects: subject.dataValues.idSubjects, idAreas: area.value})})
+        data.areas.forEach((area) => {area_has_subjectController.create({idSubjects: subject.dataValues.idSubjects, idAreas: area.value})});
         return res.status(201).json(subject);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
@@ -45,6 +45,9 @@ exports.update = async (req, res) => {
     //rules
     if (true) {
         subject = await subjectController.update(data, res);
+        area_has_subjectController.delete({idSubjects:data.idSubjects});
+        data.areas.forEach((area) => {area_has_subjectController.create({idSubjects: subject.dataValues.idSubjects, idAreas: area.value})});
+               
         return res.status(200).json(subject);
 
     } else {
