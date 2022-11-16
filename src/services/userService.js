@@ -1,4 +1,7 @@
 const userController = require("../controllers/userController");
+const area_has_userController = require("../controllers/area_has_userController");
+const user_has_languageController = require("../controllers/user_has_languageController");
+
 
 exports.create = async (req, res) => {
     data = req.body;
@@ -6,6 +9,8 @@ exports.create = async (req, res) => {
     //rules
     if (true) {
         user = await userController.create(data, res);
+        data.areas.forEach((area) => {area_has_userController.create({cpfUsers: user.dataValues.cpfUsers, idAreas: area.value})})
+        data.languages.forEach((language) => {user_has_languageController.create({cpfUsers: user.dataValues.cpfUsers, idLanguages: language.value})})
         return res.status(201).json(user);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });

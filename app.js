@@ -1,10 +1,15 @@
 const express = require('express');
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser')
 const app = express();
 const fs = require('fs');
+<<<<<<< HEAD
 var cors = require('cors');
 const jwt = require('jsonwebtoken');
 const multer = require('multer')
+=======
+var cors = require('cors')
+
+>>>>>>> b5fabf36bcdbe7a179c336137e18ac90a0be21b1
 
 require("dotenv").config();
 
