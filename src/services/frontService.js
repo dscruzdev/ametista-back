@@ -6,6 +6,8 @@ const requestController = require("../controllers/requestController");
 const commentController = require("../controllers/commentController");
 const languageController = require("../controllers/languageController");
 const subjectController = require("../controllers/subjectController");
+const user_has_languageController = require("../controllers/user_has_languageController");
+
 const date_n_time = require('date-and-time');
 const { Op } = require("sequelize");
 
@@ -297,4 +299,24 @@ exports.employees = async (req, res) => {
         user.dataValues.area = user.dataValues.area.slice(0,user.dataValues.area.length-2);
     });
     return res.status(200).json(users);
+}
+
+exports.modals = async (req, res) => {
+    const body = req.body;
+
+    const languages = await languageController.select();
+
+    const areas = await areaController.select();
+
+    const users = await userController.select();
+
+    const area_has_users = await area_has_userController.select();
+
+    const user_has_languages = await user_has_languageController.select();
+
+    const response = {
+        languages:languages, areas:areas, users:users, area_has_users:area_has_users, user_has_languages:user_has_languages
+    }
+
+    return res.status(200).json(response);
 }

@@ -4,8 +4,8 @@ const User_has_Language = require('../models/mUser_has_Language');
 exports.create = async (data, res) => {
     await db.sync();
     response = await User_has_Language.create({
-        cpfUser: data.cpfUser,
-        idLanguage: data.idLanguage,
+        cpfUsers: data.cpfUsers,
+        idLanguages: data.idLanguages,
         
     });
     return response;

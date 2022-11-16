@@ -4,8 +4,8 @@ const Area_has_User = require('../models/mArea_has_User');
 exports.create = async (data, res) => {
     await db.sync();
     response = await Area_has_User.create({
-        Area_id: data.Area_id,
-        User_cpf: data.User_cpf,
+        idAreas: data.idAreas,
+        cpfUsers: data.cpfUsers,
     });
     return response;
 }
