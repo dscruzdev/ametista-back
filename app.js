@@ -4,6 +4,7 @@ const app = express();
 const fs = require('fs');
 var cors = require('cors');
 const jwt = require('jsonwebtoken');
+const multer = require('multer')
 
 require("dotenv").config();
 

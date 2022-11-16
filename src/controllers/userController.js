@@ -11,6 +11,7 @@ exports.create = async (data, res) => {
         password: data.password,
         status: data.status,
         user_level: data.user_level,
+        user_image: data.user_image
 
     });
     return response;

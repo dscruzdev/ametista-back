@@ -22,6 +22,9 @@ const User = database.define('User',{
     user_level: {
         type: Sequelize.INTEGER,
     },
+    user_image: {
+        type: Sequelize.STRING,
+    },
     uid: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,

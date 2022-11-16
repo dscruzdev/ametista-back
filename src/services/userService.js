@@ -2,6 +2,7 @@ const userController = require("../controllers/userController");
 
 exports.create = async (req, res) => {
     data = req.body;
+    data.user_image = "/images/"+req.file.originalname;
     //rules
     if (true) {
         user = await userController.create(data, res);
