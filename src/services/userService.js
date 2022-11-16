@@ -62,7 +62,7 @@ exports.select = async (req, res) => {
 
 exports.update = async (req, res) => {
     data = req.body;
-    data.cpf = req.params.id;
+    data.cpfUsers = req.params.id;
     //rules
     if (true) {
         user = await userController.update(data, res);

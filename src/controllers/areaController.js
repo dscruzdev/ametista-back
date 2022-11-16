@@ -30,7 +30,7 @@ exports.select = async (filters = null, res) => {
 }
 
 exports.update = async (data, res) => {
-    const tochange = await Area.findByPk(data.id);
+    const tochange = await Area.findByPk(data.idAreas);
     tochange.name = data.name ? data.name : tochange.name;
     
     response = await tochange.save();

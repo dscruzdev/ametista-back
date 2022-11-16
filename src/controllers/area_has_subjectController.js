@@ -31,8 +31,8 @@ exports.select = async (filters = null, res) => {
 
 exports.update = async (data, res) => {
     const tochange = await Area_has_Subject.findByPk(data.cpf);//To check
-    tochange.Area_id = data.Area_id ? data.Area_id : tochange.Area_id;
-    tochange.Subject_id = data.Subject_id ? data.Subject_id : tochange.Subject_id;
+    tochange.idAreas = data.idAreas ? data.idAreas : tochange.idAreas;
+    tochange.idSubjects = data.idSubjects ? data.idSubjects : tochange.idSubjects;
 
     response = await tochange.save();
 
@@ -41,11 +41,18 @@ exports.update = async (data, res) => {
 }
 
 exports.delete = async (data, res) => {
-    return Area_has_Subject.destroy({
-        where: {
-            Area_id: data.Area_id,
-            Subject_id: data.Subject_id,
+    const todelete = {};
+    todelete.idAreas = data.idAreas ? data.idAreas : todelete.idAreas;
+    todelete.idSubjects = data.idSubjects ? data.idSubjects : todelete.idSubjects;
+
+    Object.keys(todelete).forEach(key =>{
+        if (todelete[key] == null || todelete[key] == undefined) {
+            delete todelete[key];
         }
+    });
+
+    return Area_has_Subject.destroy({
+        where: todelete
     });
 
 
