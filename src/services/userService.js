@@ -5,13 +5,14 @@ const user_has_languageController = require("../controllers/user_has_languageCon
 
 exports.create = async (req, res) => {
     data = req.body;
-    data.user_image = "/images/"+req.file.originalname;
+    console.log(req);
+    //data.user_image = "/images/"+req.file.originalname;
     //rules
     if (true) {
-        user = await userController.create(data, res);
-        data.areas.forEach((area) => {area_has_userController.create({cpfUsers: user.dataValues.cpfUsers, idAreas: area.value})})
-        data.languages.forEach((language) => {user_has_languageController.create({cpfUsers: user.dataValues.cpfUsers, idLanguages: language.value})})
-        return res.status(201).json(user);
+        // user = await userController.create(data, res);
+        // data.areas.forEach((area) => {area_has_userController.create({cpfUsers: user.dataValues.cpfUsers, idAreas: area.value})})
+        // data.languages.forEach((language) => {user_has_languageController.create({cpfUsers: user.dataValues.cpfUsers, idLanguages: language.value})})
+        // return res.status(201).json(user);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
     }

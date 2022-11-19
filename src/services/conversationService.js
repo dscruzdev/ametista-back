@@ -34,7 +34,7 @@ exports.newParticipantSMS = async (req, res) => {
     //rules
     if (true) {
         conversation = await conversationController.newParticipantSMS(request.SID, smsnumber, client.phone);
-        res.status(201).json(conversation);
+        return res.status(201).json(conversation);
     }
 };
 
@@ -46,7 +46,7 @@ exports.newParticipantWhatsapp = async (req, res) => {
     //rules
     if (true) {
         conversation = await conversationController.newParticipantWhatsapp(request.SID, whatsappnumber, client.phone);
-        res.status(201).json(conversation);
+        return res.status(201).json(conversation);
     }
 };
 
@@ -56,7 +56,7 @@ exports.listMessages = async (req, res) => {
     //rules
     if (true) {
         messages = await conversationController.listMessages(conversation);
-        res.status(201).json(messages);
+        return res.status(201).json(messages);
     }
 };
 
@@ -64,7 +64,18 @@ exports.listConversations = async (req, res) => {
     //rules
     if (true) {
         messages = await conversationController.listConversations();
-        res.status(201).json(messages);
+        return res.status(201).json(messages);
+    }
+};
+
+exports.delete = async (req, res) => {
+    const idRequests = req.params.id;
+    const request = await requestController.find(idRequests, res);
+    //rules
+    if (true) {
+        deletedConversation = await conversationController.delete("CH7f1e8951d4e545fc993ed9dcc8067bdc");
+        deletedRequest = await conversationController.delete({idRequests:request.idRequests});
+        return res.status(201).json({"Conversation":deletedConversation,"Request":deletedRequest});
     }
 };
 

@@ -18,6 +18,12 @@ exports.create = async (data, res) => {
     return response;
 }
 
+exports.find = async (pk, res) => {
+    await db.sync();
+    response = await Request.findByPk(pk);
+    return response;
+}
+
 exports.select = async (filters = null, res) => {
     if (filters == null) {
         await db.sync();
@@ -60,7 +66,7 @@ exports.selectOr2 = async (filters = null, res) => {
         //We can build the filter out of the function and just put in findAll later
         await db.sync();
         response = await Request.findAll({
-            where: { idSubject: {[Op.or]: filters.idSubject}, idLanguage: {[Op.or]: filters.idLanguage} }
+            where: { idSubject: { [Op.or]: filters.idSubject }, idLanguage: { [Op.or]: filters.idLanguage } }
         });
         return response;
     }
@@ -86,7 +92,7 @@ exports.update = async (data, res) => {
 exports.delete = async (data, res) => {
     return client.destroy({
         where: {
-            id: data.id
+            idRequests: data.idRequests
         }
     });
 

@@ -52,4 +52,9 @@ exports.sendMessage = async (author ,sid, body) => {
         .create({ author: author, body: body })
         .then(message => { return message });
 }
+
+exports.delete = async (sid) => {
+    return client.conversations.v1.conversations(sid)
+                       .remove();
+}
 //813380746664115
