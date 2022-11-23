@@ -20,9 +20,7 @@ exports.select = async (filters = null, res) => {
         //We can build the filter out of the function and just put in findAll later
         await db.sync();
         response = await User_has_Request.findAll({
-            where: {
-                'filter.param': 'filter.value' //out of '
-            }
+            where: filters
         });
         return response;
     }

@@ -14,6 +14,7 @@ const User_has_Request = require("../models/mUser_has_Request");
 const frontService = require("../services/frontService");
 
 router.get("/chat", frontService.chat);
+router.get("/chat/messages", frontService.messages);
 router.get("/modals", frontService.modals);
 router.get("/requests", frontService.requests);
 router.get("/others", frontService.others);

@@ -73,7 +73,10 @@ const Request = database.define('Request', {
     },
     SID:{
         type: Sequelize.STRING
-    }
+    },
+    to:{
+        type: Sequelize.STRING
+    },
 },{ paranoid: true })
 
 module.exports = Request;

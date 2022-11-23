@@ -16,8 +16,18 @@ exports.newConversation = async (req, res) => {
     }
 };
 
+exports.sendMessage = async (req, res) => {
+    const {idRequests, body} = req.body;
+    const request = await requestController.find(idRequests,res);
+    //rules
+    if (true) {
+        conversation = await conversationController.sendMessage("fbid", request.SID, body);
+        res.status(201).json(conversation);
+    }
+};
+
 exports.fetchConversation = async (req, res) => {
-    const {idRequests, cpfClients} = req.body;
+    const {idRequests} = req.body;
     const request = await requestController.select({idRequests:idRequests}, res);
     //rules
     if (true) {
@@ -51,12 +61,13 @@ exports.newParticipantWhatsapp = async (req, res) => {
 };
 
 exports.listMessages = async (req, res) => {
+    const idRequests = req.params.id;
     //precisa vir idRequest no body
-    const conversation = await this.fetchConversation(req, res);
+    const request = await requestController.find(idRequests, res);
     //rules
     if (true) {
-        messages = await conversationController.listMessages(conversation);
-        return res.status(201).json(messages);
+        messages = await conversationController.listMessages(request.SID);
+        return res.status(200).json(messages);
     }
 };
 
@@ -64,7 +75,7 @@ exports.listConversations = async (req, res) => {
     //rules
     if (true) {
         messages = await conversationController.listConversations();
-        return res.status(201).json(messages);
+        return res.status(200).json(messages);
     }
 };
 
@@ -73,9 +84,21 @@ exports.delete = async (req, res) => {
     const request = await requestController.find(idRequests, res);
     //rules
     if (true) {
-        deletedConversation = await conversationController.delete("CH7f1e8951d4e545fc993ed9dcc8067bdc");
-        deletedRequest = await conversationController.delete({idRequests:request.idRequests});
-        return res.status(201).json({"Conversation":deletedConversation,"Request":deletedRequest});
+        deletedConversation = await conversationController.delete(request.SID);
+        return res.status(201).json({"Conversation":deletedConversation});
+    }
+};
+
+exports.receivemessage = async (req, res) => {
+    const body = req.body.body;
+    
+    const from = body.split("From=")[1].split(",")[0];
+    const bodyMessage = body.split("Body=")[1].split(",")[0];
+    
+    //rules
+    if (true) {
+        deletedConversation = await conversationController.delete(request.SID);
+        return res.status(201).json({"Conversation":deletedConversation});
     }
 };
 
