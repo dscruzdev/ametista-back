@@ -8,8 +8,9 @@ const sendMessageConversation = require("../services/sendmessageConversationServ
 
 router.post("/", ConversationService.newConversation);
 router.get("/", ConversationService.listConversations);
-router.get("/messages", ConversationService.listMessages);
-router.post("/send/messenger", sendMessageConversation.sendMessageMessenger);
-//router.delete("/:id", ConversationService.delete);
+router.get("/messages/:id", ConversationService.listMessages);
+router.post("/send", ConversationService.sendMessage);
+router.delete("/:id", ConversationService.delete);
+router.post("/receivemessage", ConversationService.receivemessage);
 
 module.exports = router;

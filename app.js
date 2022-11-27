@@ -2,7 +2,10 @@ const express = require('express');
 var bodyParser = require('body-parser')
 const app = express();
 const fs = require('fs');
-var cors = require('cors')
+var cors = require('cors');
+app.use(cors({
+    origin: "*",
+}));
 
 
 require("dotenv").config();
@@ -29,9 +32,6 @@ const chatbotRoute = require("./src/routes/chatbot");
 const frontRoute = require("./src/routes/front");
 const conversationRoute = require("./src/routes/conversation");
 
-app.use(cors({
-    origin: "*",
-}));
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(express.json());
@@ -76,8 +76,32 @@ app.get("/teste", async (req, res) => {
 //     res.status(200).json(request1);
 // });
 
-app.listen(8080, () => {
+
+server = app.listen(8080, () => {
     console.log('Ouvindo porta 8080');
 }).on('error', (err) => {
     console.log(err);
 });
+var io = require('socket.io')(server, {
+    cors: {
+        origin:"*"
+    }
+});
+io.on('connection', (stream) => {
+    console.log(`O usuário ${stream.id} Conectou`);
+    stream.on("join_conversation", (data) => {
+        stream.join(data.idRequests);
+        console.log(`User ${data.cpfUsers} with ID: ${stream.id} joined conversation: ${data.idRequests}`);
+        //console.log(stream);
+    });
+
+    stream.on("send_message", (data)=>{
+        stream.to(data.idRequests).emit("receive_message", data);
+    });
+
+    stream.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+});
+app.set('socketio', io);
+

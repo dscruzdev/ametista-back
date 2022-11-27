@@ -20,9 +20,9 @@ exports.create = async (req, res) => {
 }
 
 exports.select = async (req, res) => {
-    const { id, client_cpf, category, endedAt, description,
+    const { idRequests, cpfClients, category, endedAt, description,
         deadline, priority, status, idlanguage, idsubject,
-        createdAt, updatedAt, channels_id, csat, ces, nps } = req.body;
+        createdAt, updatedAt, channels_id, CSAT, CES, NPS, SID } = req.body;
     if (req.query.filter == undefined) {
         //We should create the 'filter' param to check if have filters and later get
         //all the params to filter the response
@@ -36,8 +36,8 @@ exports.select = async (req, res) => {
         }
     } else {
         const filter = {
-            id: id ? id : null,
-            client_cpf: client_cpf ? client_cpf : null,
+            idRequests: idRequests ? idRequests : null,
+            cpfClients: cpfClients ? cpfClients : null,
             category: category ? category : null,
             endedAt: endedAt ? endedAt : null,
             description: description ? description : null,
@@ -49,9 +49,10 @@ exports.select = async (req, res) => {
             createdAt: createdAt ? createdAt : null,
             updatedAt: updatedAt ? updatedAt : null,
             channels_id: channels_id ? channels_id : null,
-            csat: csat ? csat : null,
-            ces: ces ? ces : null,
-            nps: nps ? nps : null,
+            CSAT: CSAT ? CSAT : null,
+            CES: CES ? CES : null,
+            NPS: NPS ? NPS : null,
+            SID: SID ? SID : null,
         };
         Object.keys(filter).forEach(key => {
             if (filter[key] == null) {
@@ -82,7 +83,7 @@ exports.update = async (req, res) => {
 }
 
 exports.delete = async (req, res) => {
-    data.cpf = req.params.id;
+    data.idRequests = req.params.id;
     //rules
     if (true) {
         request = await requestController.delete(data, res);

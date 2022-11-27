@@ -22,9 +22,7 @@ exports.select = async (filters = null, res) => {
         //We can build the filter out of the function and just put in findAll later
         await db.sync();
         response = await Subject.findAll({
-            where: {
-                filters
-            }
+            where: filters
         });
         return response;
     }
@@ -52,7 +50,7 @@ exports.update = async (data, res) => {
     const tochange = await Subject.findByPk(data.idSubjects);
     tochange.name = data.name ? data.name : tochange.name;
     tochange.category = data.category ? data.category : tochange.category;
-    
+
     response = await tochange.save();
 
     return response;

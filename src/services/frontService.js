@@ -340,14 +340,19 @@ exports.modals = async (req, res) => {
 }
 
 exports.messages = async (req, res) => {
-    const idRequests = req.params.id;
-    const uid = req.query.uid;
+    const { idRequests } = req.body;
+
 
     if (true) {
         const request = await requestController.find(idRequests);
         const messages = await conversationController.listMessages(request.SID);
-        const user = await userController.findByUid(uid);
-        const client = await clientController.findByPK(request.cpfClients);
+        const user_has_requests = await user_has_requestsController.select({ "idRequests": idRequests });
+        const usersCpf = [];
+        user_has_requests.forEach(async user_has_request => {
+            usersCpf.push(user_has_request.cpfUsers);
+        });
+        const users = await userController.select()
+        return res.status(418).json(user_has_requests);
         const messagesresponse = [];
 
         function addZero(i) {
@@ -355,48 +360,19 @@ exports.messages = async (req, res) => {
             return i;
         }
         var from, to;
-        const clientData = {
-            id: client.uid,
-            name: client.name.split(" ")[0],
-            //avatar: string;
-            lastMessage: "",
-            totalUnread: 0,
-            lastMessageOn: "",
-            email: client.email,
-            phone: client.phone,
-            //location: string;
-            //languages: string;
-            //subject: string;
-        };
-        const userData = {
-            id: user.uid,
-            name: user.name.split(" ")[0],
-            //avatar: string;
-            lastMessage: "",
-            totalUnread: 0,
-            lastMessageOn: "",
-            email: user.email,
-            phone: user.phone,
-            //location: string;
-            //languages: string;
-            //subject: string;
-        }
-
         messages.forEach(message => {
             if (message.author == fbid) {
-                from = userData;
-                to = clientData;
+                from = "Eu";
+                to = "Cliente";
             } else {
-                from = clientData;
-                to = userData;
+                from = "Cliente";
+                to = "Eu";
             }
 
-            messagesresponse.push({ "from": from, "to": to, "message": { "type": "text", "value": message.body }, "sendOn": addZero(message.dateCreated.getHours()) + ":" + addZero(message.dateCreated.getMinutes()) });
-            clientData.lastMessage = message.body;
-            clientData.lastMessageOn = addZero(message.dateCreated.getHours()) + ":" + addZero(message.dateCreated.getMinutes());
+            messagesresponse.push({ "from": from, "to": to, "message": message.body, "sendOn": addZero(message.dateCreated.getHours()) + ":" + addZero(message.dateCreated.getMinutes()) });
         });
 
-        return res.status(200).json(messagesresponse);
+        return res.status(200).json(messagesresponse)
     } else {
         return res.status(403).json({ "message": "Unauthorized" });
     }

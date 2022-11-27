@@ -36,17 +36,30 @@ exports.newParticipantWhatsapp = async (sid, from, to) => {
         .then(participant => { return participant });
 }
 
-exports.listMessages = async (conversation) => {
-    return await conversation.getMessages(30, 0, "backwards");
+exports.newParticipantMessenger = async (sid, from, to) => {
+    return client.conversations.v1.conversations(sid)
+        .participants
+        .create({
+            'messagingBinding.address': 'messenger:' + to,
+            'messagingBinding.proxyAddress': 'messenger:' + from
+        })
+        .then(participant => { return participant });
+}
+
+exports.listMessages = async (sid) => {
+    console.log(sid);
+    return await client.conversations.v1.conversations(sid)
+        .messages.list()
+        .then(messages => { return messages });;
 }
 
 exports.listConversations = async () => {
     return client.conversations.v1.conversations
-        .list({ limit: 20 })
+        .list()
         .then(conversations => { return conversations });
 }
 
-exports.sendMessage = async (author ,sid, body) => {
+exports.sendMessage = async (author, sid, body) => {
     return client.conversations.v1.conversations(sid)
         .messages
         .create({ author: author, body: body })
@@ -55,6 +68,5 @@ exports.sendMessage = async (author ,sid, body) => {
 
 exports.delete = async (sid) => {
     return client.conversations.v1.conversations(sid)
-                       .remove();
+        .remove();
 }
-//813380746664115

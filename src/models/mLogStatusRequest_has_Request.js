@@ -9,7 +9,7 @@ const LogStatusRequest_has_Request = database.define('LogStatusRequest_has_Reque
         allowNull: false,
         references:{
             model: logstatus,
-            key: 'idLogStatusRequests'
+            key: 'idStatusRequests'
         }
     },
     idRequests: {

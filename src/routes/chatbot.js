@@ -8,6 +8,9 @@ const chatbotService = require("../services/chatbotService");
 router.post("/findclient", chatbotService.findclient);
 router.post("/newclient", chatbotService.newclient);
 router.post("/newrequest", chatbotService.newrequest);
+router.post("/checkcall", chatbotService.checkcall);
+router.post("/getoptions", chatbotService.getoptions);
+router.post("/checksubject", chatbotService.checksubject);
 //router.delete("/:id", AreaService.delete)
 
 module.exports = router;
