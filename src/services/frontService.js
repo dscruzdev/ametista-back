@@ -8,6 +8,9 @@ const commentController = require("../controllers/commentController");
 const languageController = require("../controllers/languageController");
 const subjectController = require("../controllers/subjectController");
 const user_has_languageController = require("../controllers/user_has_languageController");
+const conversationController = require("../controllers/conversationController");
+const user_has_requestsController = require("../controllers/user_has_requestController");
+const fbid = process.env.FBPAGEID;
 
 const date_n_time = require('date-and-time');
 const { Op } = require("sequelize");
@@ -59,10 +62,9 @@ exports.chat = async (req, res) => {
 
         const language = await languageController.selectOr(filter2, res);
 
-        const filter3 = { idSubject: f3subjects, idLanguage: f3languages };
+        const filter3 = { idSubject: f3subjects, idLanguage: f3languages, status: "open" };
 
         const request = await requestController.selectOr2(filter3, res);
-
         //status
 
         var clientscpfs = [];
@@ -96,6 +98,7 @@ exports.chat = async (req, res) => {
                 var varforsubject;
                 var hiscomments = [];
                 var hismessages = [];
+                var messages = [];
                 language.forEach(data3 => {
                     if (data3.idLanguages == data2.idLanguage) {
                         varforlanguage = data3.language;
@@ -124,6 +127,7 @@ exports.chat = async (req, res) => {
                 }
             });
             data1.dataValues.requests = hisrequests;
+
             response.push(data1);
         });
         return res.status(200).json(response);
@@ -251,14 +255,14 @@ exports.others = async (req, res) => {
         area.dataValues.createdtime_on = date_n_time.format(date, "HH:mm");
         others.push(area);
     });
-    
+
     subjects.forEach(subject => {
         const subjectareas = [];
         area_has_subjects.forEach(area_has_subject => {
             if (area_has_subject.idSubjects == subject.idSubjects) {
                 areas.forEach(area => {
                     if (area.idAreas == area_has_subject.idAreas) {
-                        subjectareas.push({value:area.idAreas,label:area.name});
+                        subjectareas.push({ value: area.idAreas, label: area.name });
                     }
                 });
 
@@ -329,8 +333,71 @@ exports.modals = async (req, res) => {
     const user_has_languages = await user_has_languageController.select();
 
     const response = {
-        languages:languages, areas:areas, users:users, area_has_users:area_has_users, user_has_languages:user_has_languages
+        languages: languages, areas: areas, users: users, area_has_users: area_has_users, user_has_languages: user_has_languages
     }
 
     return res.status(200).json(response);
+}
+
+exports.messages = async (req, res) => {
+    const idRequests = req.params.id;
+    const uid = req.query.uid;
+
+    if (true) {
+        const request = await requestController.find(idRequests);
+        const messages = await conversationController.listMessages(request.SID);
+        const user = await userController.findByUid(uid);
+        const client = await clientController.findByPK(request.cpfClients);
+        const messagesresponse = [];
+
+        function addZero(i) {
+            if (i < 10) { i = "0" + i }
+            return i;
+        }
+        var from, to;
+        const clientData = {
+            id: client.uid,
+            name: client.name.split(" ")[0],
+            //avatar: string;
+            lastMessage: "",
+            totalUnread: 0,
+            lastMessageOn: "",
+            email: client.email,
+            phone: client.phone,
+            //location: string;
+            //languages: string;
+            //subject: string;
+        };
+        const userData = {
+            id: user.uid,
+            name: user.name.split(" ")[0],
+            //avatar: string;
+            lastMessage: "",
+            totalUnread: 0,
+            lastMessageOn: "",
+            email: user.email,
+            phone: user.phone,
+            //location: string;
+            //languages: string;
+            //subject: string;
+        }
+
+        messages.forEach(message => {
+            if (message.author == fbid) {
+                from = userData;
+                to = clientData;
+            } else {
+                from = clientData;
+                to = userData;
+            }
+
+            messagesresponse.push({ "from": from, "to": to, "message": { "type": "text", "value": message.body }, "sendOn": addZero(message.dateCreated.getHours()) + ":" + addZero(message.dateCreated.getMinutes()) });
+            clientData.lastMessage = message.body;
+            clientData.lastMessageOn = addZero(message.dateCreated.getHours()) + ":" + addZero(message.dateCreated.getMinutes());
+        });
+
+        return res.status(200).json(messagesresponse);
+    } else {
+        return res.status(403).json({ "message": "Unauthorized" });
+    }
 }
