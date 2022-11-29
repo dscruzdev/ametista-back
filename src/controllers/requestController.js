@@ -14,6 +14,7 @@ exports.create = async (data, res) => {
         status: data.status,
         idLanguage: data.idLanguage,
         idSubject: data.idSubject,
+        idChannels: data.idChannels
     });
     return response;
 }

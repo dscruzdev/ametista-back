@@ -74,6 +74,9 @@ const Request = database.define('Request', {
     SID:{
         type: Sequelize.STRING
     },
+    flowSID:{
+        type: Sequelize.STRING
+    },
     to:{
         type: Sequelize.STRING
     },

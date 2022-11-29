@@ -27,6 +27,11 @@ exports.newParticipantSMS = async (sid, from, to) => {
 }
 
 exports.newParticipantWhatsapp = async (sid, from, to) => {
+    console.log(sid);
+    console.log("----------------------------");
+    console.log(from);
+    console.log("----------------------------");
+    console.log(to);
     return client.conversations.v1.conversations(sid)
         .participants
         .create({
@@ -47,7 +52,6 @@ exports.newParticipantMessenger = async (sid, from, to) => {
 }
 
 exports.listMessages = async (sid) => {
-    console.log(sid);
     return await client.conversations.v1.conversations(sid)
         .messages.list()
         .then(messages => { return messages });;
@@ -68,5 +72,18 @@ exports.sendMessage = async (author, sid, body) => {
 
 exports.delete = async (sid) => {
     return client.conversations.v1.conversations(sid)
+        .update({ state: 'closed' })
+        .then(conversation => { return conversation });
+
+    return client.conversations.v1.conversations(sid)
         .remove();
+}
+
+exports.endrequest = async (sid, from, to, idRequests) => {
+    client.studio.v2.flows('FW6bb2a0c6cb0be4f59aaf0c5869e01799')
+        .executions.create({parameters:{idRequests:idRequests},to:to, from:from}).then(execution => {return 0});
+    return client.conversations.v1.conversations(sid)
+        .update({ state: 'closed' })
+        .then(conversation => { return conversation });
+
 }

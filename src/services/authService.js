@@ -1,21 +1,39 @@
 const userController = require('../controllers/userController');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const SECRET = process.env.JWTTOKEN;
+const area_has_usersController = require("../controllers/area_has_userController");
+const user_has_languagesController = require("../controllers/user_has_languageController");
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     filter = {
         email: email ? email : null,
-        password: password ? password : null,
     }
     var response = await userController.selectOne(filter, res);
-    if (response) {
+    response.password
+    const testedpassword = await bcrypt.compare(password, response.password);
+
+    if (response && testedpassword) {
         const now = Date.now();
+        area_has_users = await area_has_usersController.select({cpfUsers: response.cpfUsers});
+        user_has_languages = await user_has_languagesController.select({cpfUsers: response.cpfUsers});
+        var areas = "";
+        var languages = "";
+        area_has_users.forEach(area => {
+            areas += area.idAreas + ","
+        });
+        user_has_languages.forEach(language => {
+            languages += language.idLanguages + ","
+        });
+        
         const token = jwt.sign({
             uid: response.uid,
+            languages: languages.slice(0,languages.length-1),
+            areas: areas.slice(0,areas.length-1),
             when: now,
             from: req.rawHeaders
-        }, SECRET, {expiresIn:300});
+        }, SECRET, {expiresIn:"8h"});
 
         return res.status(200).json({"status":"Authenticated","token":token});
     }else{

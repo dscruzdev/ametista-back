@@ -14,6 +14,20 @@ exports.create = async (data, res) => {
     return response;
 }
 
+exports.findByUid = async (uid, res) => {
+    await db.sync();
+    response = await client.findOne({
+        where: {uid:uid}
+    });
+    return response;
+}
+
+exports.findByPK = async (pk, res) => {
+    await db.sync();
+    response = await client.findByPk(pk);
+    return response;
+}
+
 exports.select = async (filters = null, res) => {
     if (filters == null) {
         await db.sync();
