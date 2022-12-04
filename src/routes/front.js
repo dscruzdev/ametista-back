@@ -13,6 +13,7 @@ const User_has_Request = require("../models/mUser_has_Request");
 
 const frontService = require("../services/frontService");
 
+router.get("/inicio", frontService.inicio);
 router.get("/chat", frontService.chat);
 router.get("/chat/messages/:id", frontService.messages);
 router.get("/modals", frontService.modals);

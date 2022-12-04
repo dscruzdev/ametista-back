@@ -10,6 +10,7 @@ const subjectController = require("../controllers/subjectController");
 const user_has_languageController = require("../controllers/user_has_languageController");
 const conversationController = require("../controllers/conversationController");
 const user_has_requestsController = require("../controllers/user_has_requestController");
+const logStatusRequest_has_RequestController = require("../controllers/logStatusRequest_has_RequestController");
 const fbid = process.env.FBPAGEID;
 const whatsapp = process.env.WHATSAPPNUMBER;
 const sms = process.env.SMSNUMBER;
@@ -393,7 +394,7 @@ exports.messages = async (req, res) => {
             //subject: string;
         };
         const userData = {
-            id: user.uid,
+            id: "f79b3375-257b-420a-af19-913162987b77",
             name: user.name.split(" ")[0],
             //avatar: string;
             lastMessage: "",
@@ -424,4 +425,180 @@ exports.messages = async (req, res) => {
     } else {
         return res.status(403).json({ "message": "Unauthorized" });
     }
+}
+
+exports.inicio = async (req, res) => {
+    const requests = await requestController.select(null, res);
+    const logstatusrequest_has_request = await logStatusRequest_has_RequestController.select(null, res);
+    function semfdata() {
+        var metricas = {
+            NPS: {
+                porcentagem: {
+                    detratores: 0,
+                    neutros: 0,
+                    promotores: 0,
+                },
+                detratores: 0,
+                neutros: 0,
+                promotores: 0,
+                total: 0,
+            },
+            CSAT: {
+                porcentagem: {
+                    5: 0,
+                    4: 0,
+                    3: 0,
+                    2: 0,
+                    1: 0
+                },
+                5: 0,
+                4: 0,
+                3: 0,
+                2: 0,
+                1: 0,
+                total: 0,
+            },
+            channels: {
+                porcentagem: {
+                    whatsapp: 0,
+                    messenger: 0,
+                    SMS: 0,
+                    email: 0,
+                },
+                whatsapp: 0,
+                messenger: 0,
+                SMS: 0,
+                email: 0,
+            },
+            requests: {
+                porcentagem: {
+                    open: 0,
+                    going: 0,
+                    ended: 0,
+                },
+                open: 0,
+                going: 0,
+                ended: 0,
+                total: 0,
+            },
+        };
+        logstatusrequest_has_request.forEach((logstatusrequest) => {
+            if (logstatusrequest.idStatusRequests == 1) {
+                metricas.requests.open++;
+            }
+            if (logstatusrequest.idStatusRequests == 2) {
+                metricas.requests.going++;
+            }
+            if (logstatusrequest.idStatusRequests == 3) {
+                metricas.requests.ended++;
+            }
+        });
+        requests.forEach((request) => {
+            if ((request.NPS >= 0 || request.NPS <= 6) && request.NPS != null) {
+                metricas.NPS.detratores++;
+            }
+            if ((request.NPS >= 7 || request.NPS <= 8) && request.NPS != null) {
+                metricas.NPS.neutros++;
+            }
+            if ((request.NPS >= 9 || request.NPS <= 10) && request.NPS != null) {
+                metricas.NPS.promotores++;
+            }
+            if ((request.CSAT == 1) && request.CSAT != null) {
+                metricas.CSAT[1]++;
+            }
+            if ((request.CSAT == 2) && request.CSAT != null) {
+                metricas.CSAT[2]++;
+            }
+            if ((request.CSAT == 3) && request.CSAT != null) {
+                metricas.CSAT[3]++;
+            }
+            if ((request.CSAT == 4) && request.CSAT != null) {
+                metricas.CSAT[4]++;
+            }
+            if ((request.CSAT == 5) && request.CSAT != null) {
+                metricas.CSAT[5]++;
+            }
+            if (request.idChannels == 1) {
+                metricas.channels.messenger++;
+            }
+            if (request.idChannels == 2) {
+                metricas.channels.whatsapp++;
+            }
+            if (request.idChannels == 3) {
+                metricas.channels.SMS++;
+            }
+            if (request.idChannels == 4) {
+                metricas.channels.email++;
+            }
+            metricas.requests.total++;
+        });
+        metricas.NPS.total = metricas.NPS.detratores + metricas.NPS.neutros + metricas.NPS.promotores;
+        metricas.CSAT.total = metricas.CSAT[1] + metricas.CSAT[2] + metricas.CSAT[3] + metricas.CSAT[4] + metricas.CSAT[5];
+        if (metricas.NPS.total != 0) {
+            metricas.NPS.porcentagem.detratores = metricas.NPS.detratores / metricas.NPS.total;
+            metricas.NPS.porcentagem.neutros = metricas.NPS.neutros / metricas.NPS.total;
+            metricas.NPS.porcentagem.promotores = metricas.NPS.promotores / metricas.NPS.total;
+        }
+
+        if (metricas.CSAT.total != 0) {
+            metricas.CSAT.porcentagem[1] = metricas.CSAT[1] / metricas.CSAT.total;
+            metricas.CSAT.porcentagem[2] = metricas.CSAT[2] / metricas.CSAT.total;
+            metricas.CSAT.porcentagem[3] = metricas.CSAT[3] / metricas.CSAT.total;
+            metricas.CSAT.porcentagem[4] = metricas.CSAT[4] / metricas.CSAT.total;
+            metricas.CSAT.porcentagem[5] = metricas.CSAT[5] / metricas.CSAT.total;
+        }
+
+        if (metricas.requests.total != 0) {
+            metricas.channels.porcentagem.whatsapp = metricas.channels.whatsapp / metricas.requests.total;
+            metricas.channels.porcentagem.email = metricas.channels.email / metricas.requests.total;
+            metricas.channels.porcentagem.SMS = metricas.channels.SMS / metricas.requests.total;
+            metricas.channels.porcentagem.messenger = metricas.channels.messenger / metricas.requests.total;
+            metricas.requests.porcentagem.going = metricas.requests.going / metricas.requests.total;
+            metricas.requests.porcentagem.open = metricas.requests.open / metricas.requests.total;
+            metricas.requests.porcentagem.ended = metricas.requests.ended / metricas.requests.total;
+        }
+        return metricas;
+    }
+    function comfdata() {
+        requests.forEach((request) => {
+            logstatusrequest_has_request.forEach((logStatus) => {
+                var most_recent = new Date(0);
+                if ((logStatus.idRequests == request.idRequests) && (most_recent <= logStatus.createdAt)) {
+                    most_recent = logStatus.createdAt;
+                    switch (logStatus.idStatusRequests) {
+                        case 1:
+                            request.dataValues.status = "Em aberto";
+                            break;
+                        case 2:
+                            request.dataValues.status = "Em andamento";
+                            break;
+                        default:
+                            request.dataValues.status = "Finalizado";
+                            break;
+                    }
+                }
+            });
+            switch (request.idChannels) {
+                case 1:
+                    request.dataValues.channelLabel = "Facebook Messenger";
+                    break;
+                case 2:
+                    request.dataValues.channelLabel = "WhatsApp";
+                    break;
+                case 3:
+                    request.dataValues.channelLabel = "SMS";
+                    break;
+                default:
+                    request.dataValues.channelLabel = "Email";
+                    break;
+            }
+        });
+        return requests;
+    }
+    /*
+    Se for usar o filtro de data na pagina inicial, peça coloque comfdata() na linha 603
+    Se  não for usar o filtro de data na pagina inicial, peça coloque semfdata() na linha 603
+    O melhor jeito de testar é com o postman, mas você pode dar console.log no front pra ver como acessar os dados
+    */
+    return res.status(418).json(comfdata());
 }

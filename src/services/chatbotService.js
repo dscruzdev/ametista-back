@@ -181,6 +181,7 @@ exports.checkcall = async (req, res) => {
     } else {
         var io = req.app.get('socketio');
         io.emit("new_request", request);
+        console.log("Enviou");
         return res.status(200).json(request);
     }
 }

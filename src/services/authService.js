@@ -6,38 +6,54 @@ const area_has_usersController = require("../controllers/area_has_userController
 const user_has_languagesController = require("../controllers/user_has_languageController");
 
 exports.login = async (req, res) => {
-    const { email, password } = req.body;
+    const email = req.body.username;
+    const password = req.body.password;
     filter = {
         email: email ? email : null,
     }
+
     var response = await userController.selectOne(filter, res);
-    response.password
-    const testedpassword = await bcrypt.compare(password, response.password);
+    if (response) {
+        const testedpassword = await bcrypt.compare(password, response.password);
 
-    if (response && testedpassword) {
-        const now = Date.now();
-        area_has_users = await area_has_usersController.select({cpfUsers: response.cpfUsers});
-        user_has_languages = await user_has_languagesController.select({cpfUsers: response.cpfUsers});
-        var areas = "";
-        var languages = "";
-        area_has_users.forEach(area => {
-            areas += area.idAreas + ","
-        });
-        user_has_languages.forEach(language => {
-            languages += language.idLanguages + ","
-        });
-        
-        const token = jwt.sign({
-            uid: response.uid,
-            languages: languages.slice(0,languages.length-1),
-            areas: areas.slice(0,areas.length-1),
-            when: now,
-            from: req.rawHeaders
-        }, SECRET, {expiresIn:"8h"});
+        if (testedpassword) {
+            const now = Date.now();
+            area_has_users = await area_has_usersController.select({ cpfUsers: response.cpfUsers });
+            user_has_languages = await user_has_languagesController.select({ cpfUsers: response.cpfUsers });
+            var areas = "";
+            var languages = "";
+            area_has_users.forEach(area => {
+                areas += area.idAreas + ","
+            });
+            user_has_languages.forEach(language => {
+                languages += language.idLanguages + ","
+            });
+            const separatedName = response.name.split(" ");
 
-        return res.status(200).json({"status":"Authenticated","token":token});
-    }else{
-        return res.status(404).json({"message":"Usuário não encontrado", "status":404});
+            const token = jwt.sign({
+                uid: response.uid,
+                username: separatedName[0] + " " + separatedName[separatedName.length - 1].slice(0, 1).toUpperCase() + ".",
+                firstName: separatedName[0],
+                lastName: separatedName[separatedName.length - 1],
+                user_level: response.user_level,
+                languages: languages.slice(0, languages.length - 1),
+                areas: areas.slice(0, areas.length - 1),
+                when: now,
+                from: req.rawHeaders
+            }, SECRET, { expiresIn: "8h" });
+
+            return res.status(200).json(
+                {
+                    "firstName": separatedName[0],
+                    "id": response.uid,
+                    "lastName": separatedName[separatedName.length - 1],
+                    "role": (response.user_level == 1 ? "Admin" : "Attendant"),
+                    "token": token,
+                    "username": separatedName[0] + " " + separatedName[separatedName.length - 1].slice(0, 1).toUpperCase() + ".",
+                });
+        }
+    } else {
+        return res.status(401).json({ "message": "Usuário não encontrado", "status": 401 });
     }
 }
 

@@ -117,7 +117,7 @@ exports.receivemessage = async (req, res) => {
 
 exports.receiveEmail = async (req, res) => {
     const response = new Object();
-    const responseArray = [];
+    var responseArray = [];
     // var imap = new Imap({
     //     user: process.env.EMAIL,
     //     password: process.env.EMAILPASSWORD,
@@ -155,7 +155,7 @@ exports.receiveEmail = async (req, res) => {
                         fs.writeFile(`emails/mail${key}.html`, JSON.stringify(mail),()=>{
                             console.log(`mail ${key} on file`)
                         });
-                        //responseArray.push(mail.html);
+                        responseArray.push(mail.html);
                     });
                 });
             });
