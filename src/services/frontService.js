@@ -66,7 +66,7 @@ exports.chat = async (req, res) => {
 
         const language = await languageController.selectOr(filter2, res);
 
-        const filter3 = { idSubject: f3subjects, idLanguage: f3languages, status: "open" };
+        const filter3 = { idSubject: f3subjects, idLanguage: f3languages, status: "Em aberto" };
 
         const request = await requestController.selectOr2(filter3, res);
         //status
