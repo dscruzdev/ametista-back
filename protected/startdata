@@ -1,0 +1,24 @@
+-- Dados que tem que estar no banco assim que for criado
+
+INSERT INTO Channels(`idChannels`,`name`) VALUES (1,'Facebook Messenger');
+INSERT INTO Channels(`idChannels`,`name`) VALUES (2,'WhatsApp');
+INSERT INTO Channels(`idChannels`,`name`) VALUES (3,'SMS');
+INSERT INTO Channels(`idChannels`,`name`) VALUES (4,'Email');
+
+INSERT INTO StatusRequests(`idStatusRequests`, `status`) VALUES (1,'Em aberto');
+INSERT INTO StatusRequests(`idStatusRequests`, `status`) VALUES (2,'Em andamento');
+INSERT INTO StatusRequests(`idStatusRequests`, `status`) VALUES (3,'Finalizado');
+
+INSERT INTO StatusUsers(`idStatusUsers`, `status`) VALUES (1,'Online');
+INSERT INTO StatusUsers(`idStatusUsers`, `status`) VALUES (2,'Ocioso');
+INSERT INTO StatusUsers(`idStatusUsers`, `status`) VALUES (3,'Offline');
+
+INSERT INTO Subjects(`idSubjects`, `name`) VALUES (1,'Financeiro');
+INSERT INTO Subjects(`idSubjects`, `name`) VALUES (2,'Técnico');
+INSERT INTO Subjects(`idSubjects`, `name`) VALUES (3,'Vendas');
+INSERT INTO Subjects(`idSubjects`, `name`) VALUES (4,'Outros');
+
+INSERT INTO Areas(`idAreas`, `name`, `createdAt`,`updatedAt`) VALUES (1,'Financeiro','2022-11-27 17:55', '2022-11-27 17:55');
+INSERT INTO Areas(`idAreas`, `name`, `createdAt`,`updatedAt`) VALUES (2,'Técnico','2022-11-27 17:55', '2022-11-27 17:55');
+INSERT INTO Areas(`idAreas`, `name`, `createdAt`,`updatedAt`) VALUES (3,'Vendas','2022-11-27 17:55', '2022-11-27 17:55');
+INSERT INTO Areas(`idAreas`, `name`, `createdAt`,`updatedAt`) VALUES (4,'Outros','2022-11-27 17:55', '2022-11-27 17:55');

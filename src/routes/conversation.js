@@ -12,5 +12,6 @@ router.get("/messages/:id", ConversationService.listMessages);
 router.post("/send", ConversationService.sendMessage);
 router.delete("/:id", ConversationService.delete);
 router.post("/receivemessage", ConversationService.receivemessage);
+router.get("/receiveemail", ConversationService.receiveEmail);
 
 module.exports = router;
