@@ -8,5 +8,6 @@ const requestService = require("../services/requestService");
 router.post("/",requestService.create);
 router.put("/",requestService.update);
 router.get("/",requestService.select);
+router.put("/setscore",requestService.setScore);
 
 module.exports = router;

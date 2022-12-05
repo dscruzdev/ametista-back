@@ -428,6 +428,8 @@ exports.messages = async (req, res) => {
 }
 
 exports.inicio = async (req, res) => {
+
+
     const requests = await requestController.select(null, res);
     const logstatusrequest_has_request = await logStatusRequest_has_RequestController.select(null, res);
     function semfdata() {
@@ -561,6 +563,23 @@ exports.inicio = async (req, res) => {
     }
     function comfdata() {
         requests.forEach((request) => {
+            var reabertura = 0;
+    requests.forEach(request => {
+        var fechamento;
+        logstatusrequest_has_request.forEach(relacao => {
+            if (relacao.idRequests == request.idRequests) {
+                console.log(fechamento);
+                if (relacao.idLogStatusRequests == 3) {
+                    fechamento = relacao.createdAt;
+                }
+                const data_criacao = new Date(relacao.createdAt);
+                const data_teste = new Date(fechamento);
+                if (relacao.idLogStatusRequests == 1 && relacao.createdAt >= fechamento) {
+                    reabertura++;
+                }
+            }
+        });
+    });
             logstatusrequest_has_request.forEach((logStatus) => {
                 var most_recent = new Date(0);
                 if ((logStatus.idRequests == request.idRequests) && (most_recent <= logStatus.createdAt)) {
@@ -600,5 +619,5 @@ exports.inicio = async (req, res) => {
     Se  não for usar o filtro de data na pagina inicial, peça coloque semfdata() na linha 603
     O melhor jeito de testar é com o postman, mas você pode dar console.log no front pra ver como acessar os dados
     */
-    return res.status(418).json(comfdata());
+    return res.status(200).json(comfdata());
 }
