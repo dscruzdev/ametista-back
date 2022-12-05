@@ -24,7 +24,7 @@ const Request = database.define('Request', {
         type: Sequelize.STRING,
     },
     endedAt: {
-        type: 'TIMESTAMP',
+        type: 'DATETIME',
 
     },
     description: {

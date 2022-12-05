@@ -31,6 +31,7 @@ exports.sendMessage = async (req, res) => {
         res.status(201).json(conversation);
     }
 };
+exports.teste = async (req, res) => {}
 
 exports.fetchConversation = async (req, res) => {
     const { idRequests } = req.body;
@@ -139,7 +140,7 @@ exports.receiveEmail = async (req, res) => {
 
     imaps.connect(config).then(function (connection) {
         return connection.openBox('INBOX').then(function () {
-            var searchCriteria = ['1:2'];
+            var searchCriteria = ['*'];
             var fetchOptions = {
                 bodies: ['HEADER', 'TEXT', ''],
             };
