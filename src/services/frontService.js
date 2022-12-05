@@ -23,7 +23,7 @@ exports.chat = async (req, res) => {
     //const { idSubject, name, category, idLanguage } = req.body;
     //Ver quais assuntos o usuario está apto a pegar, se for admin pega todos
     //rules
-    const idSubject = '1,2,3';
+    const idSubject = '1,2,3,4,5';
     const idLanguage = '1,2,3';
     const subjects = [];
     const f3subjects = [];
@@ -66,7 +66,7 @@ exports.chat = async (req, res) => {
 
         const language = await languageController.selectOr(filter2, res);
 
-        const filter3 = { idSubject: f3subjects, idLanguage: f3languages, status: "Em aberto" };
+        const filter3 = { idSubject: f3subjects, idLanguage: f3languages, status: "open" };
 
         const request = await requestController.selectOr2(filter3, res);
         //status
@@ -430,6 +430,7 @@ exports.messages = async (req, res) => {
 exports.inicio = async (req, res) => {
     const requests = await requestController.select(null, res);
     const logstatusrequest_has_request = await logStatusRequest_has_RequestController.select(null, res);
+
     function semfdata() {
         var metricas = {
             NPS: {
@@ -595,6 +596,9 @@ exports.inicio = async (req, res) => {
         });
         return requests;
     }
+
+
+
     /*
     Se for usar o filtro de data na pagina inicial, peça coloque comfdata() na linha 603
     Se  não for usar o filtro de data na pagina inicial, peça coloque semfdata() na linha 603

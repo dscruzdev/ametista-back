@@ -5,6 +5,7 @@ const subjectController = require('../controllers/subjectController');
 
 const fbid = process.env.FBPAGEID;
 const whatsappnumber = process.env.WHATSAPPNUMBER;
+const smsnumber = process.env.SMSNUMBER;
 
 const fs = require("fs");
 const { json } = require("body-parser");
@@ -131,7 +132,7 @@ exports.newrequest = async (req, res) => {
                 break;
             case "3":
                 try {
-                    conversationController.newParticipantSMS(sid, fbid, to);
+                    conversationController.newParticipantSMS(sid, smsnumber, to);
                 } catch (error) {
                     return res.status(500).json(error)
                 }
@@ -146,8 +147,8 @@ exports.newrequest = async (req, res) => {
         //adicionar o tipo de comunicador a essa conversa
 
         //adicionar o tipo de comunicador a essa conversa
-        //var io = req.app.get('socketio');
-        //io.to(request[0].idRequests).emit("receive_message", messagetosend);
+        // var io = req.app.get('socketio');
+        // io.to(request[0].idRequests).emit("receive_message", messagetosend);
         return res.status(201).json(request);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
@@ -156,7 +157,7 @@ exports.newrequest = async (req, res) => {
 
 exports.checkcall = async (req, res) => {
     data = req.body.body;
-
+console.log(data);
     var to = data.split(`"From":`)[1].split(",")[0].toString();
     var bodyMessage = data.split(`"Body":`)[1].split(",")[0].toString();
     to = to.slice(1, to.length - 1);
@@ -180,8 +181,9 @@ exports.checkcall = async (req, res) => {
         return res.status(404).json({ "message": "Request not found", "idChannels": idChannels });
     } else {
         var io = req.app.get('socketio');
-        io.emit("new_request", request);
-        console.log("Enviou");
+        // io.emit("new_request", request);
+        io.to(request[0].idRequests).emit("receive_message", bodyMessage);
+        console.log(bodyMessage);
         return res.status(200).json(request);
     }
 }

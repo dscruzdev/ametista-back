@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs');
 const SECRET = process.env.JWTTOKEN;
 const area_has_usersController = require("../controllers/area_has_userController");
 const user_has_languagesController = require("../controllers/user_has_languageController");
+const whatsapp = process.env.WHATSAPPNUMBER;
+
 
 exports.login = async (req, res) => {
     const email = req.body.username;
@@ -49,6 +51,10 @@ exports.login = async (req, res) => {
                     "lastName": separatedName[separatedName.length - 1],
                     "role": (response.user_level == 1 ? "Admin" : "Attendant"),
                     "token": token,
+                    "languages": languages.slice(0, languages.length - 1),
+                    "areas": areas.slice(0, areas.length - 1),
+                    "email": response.email,
+                    "phone": whatsapp,
                     "username": separatedName[0] + " " + separatedName[separatedName.length - 1].slice(0, 1).toUpperCase() + ".",
                 });
         }

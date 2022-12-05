@@ -82,6 +82,21 @@ exports.update = async (req, res) => {
     }
 }
 
+exports.setScore = async (req, res) => {
+    const {csat, nps, idRequests} = req.body;
+
+    const request = await requestController.find(parseInt(idRequests));
+    if (parseInt(csat) > 0 && parseInt(csat) <= 5) {
+        request.set({ CSAT: csat });
+    }
+    if (parseInt(nps) > 0 && parseInt(nps) <= 10) {
+        request.set({ NPS: nps });
+    }
+    await request.save();
+    return res.status(201).json(request);
+
+}
+
 exports.delete = async (req, res) => {
     data.idRequests = req.params.id;
     //rules

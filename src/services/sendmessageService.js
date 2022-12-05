@@ -5,14 +5,14 @@ const smsnumber = process.env.SMSNUMBER;
 const email = process.env.EMAIL;
 const fbid = process.env.FBPAGEID;
 
-exports.sendMessageWhatsapp = (req, res) => { //Envia mensagem por conversation
+exports.sendMessageWhatsapp = async (req, res) => { //Envia mensagem por conversation
     data = req.body;
     from = 'whatsapp:' + whatsappnumber;
-    to = 'whatsapp:+55' + data.to;
+    to = 'whatsapp:' + data.to;
     body = data.body;
     //rules
     if (true) {
-        sentMessage = sendMessageController.sendMessageSMS(from, to, body);
+        sentMessage = await sendMessageController.sendMessageSMS(from, to, body);
         res.status(200).json(sentMessage);
     }
 }
