@@ -14,7 +14,7 @@ const Request = database.define('Request', {
     },
     cpfClients: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: client,
             key: 'cpfClients'

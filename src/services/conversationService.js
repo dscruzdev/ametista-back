@@ -31,7 +31,7 @@ exports.sendMessage = async (req, res) => {
         res.status(201).json(conversation);
     }
 };
-exports.teste = async (req, res) => {}
+exports.teste = async (req, res) => { }
 
 exports.fetchConversation = async (req, res) => {
     const { idRequests } = req.body;
@@ -140,7 +140,7 @@ exports.receiveEmail = async (req, res) => {
 
     imaps.connect(config).then(function (connection) {
         return connection.openBox('INBOX').then(function () {
-            var searchCriteria = ['*'];
+            var searchCriteria = ['1:*'];
             var fetchOptions = {
                 bodies: ['HEADER', 'TEXT', ''],
             };
@@ -153,7 +153,7 @@ exports.receiveEmail = async (req, res) => {
                         // access to the whole mail object
                         //console.log(mail.subject);
                         //console.log(mail.html);
-                        fs.writeFile(`emails/mail${key}.html`, JSON.stringify(mail),()=>{
+                        fs.writeFile(`emails/mail${key}.html`, JSON.stringify(mail), () => {
                             console.log(`mail ${key} on file`)
                         });
                         responseArray.push(mail.html);
@@ -165,4 +165,51 @@ exports.receiveEmail = async (req, res) => {
     return res.status(200).json(responseArray);
 }
 
+exports.exportEmail = async (req, res) => {
+
+    let arr = [];
+
+
+    // Creating a function which takes a file as input
+    const readFileLines = filename =>
+        fs
+            .readFileSync(filename)
+            .toString('UTF8');
+
+
+    // Driver code
+    const files = fs.readdirSync('./emails/',);
+
+
+
+    const requests = await requestController.select({ idChannels: 4 }, res);
+
+
+    files.forEach(file => {
+        var create = true;
+        requests.forEach(request =>{
+            if(request.description == file){
+                create = false;
+            }
+            
+        });
+        if(create){
+            requestController.create({
+                description: file,
+                priority: '1',
+                status: 'open',
+                idLanguage: '1',
+                idSubject: '5',
+                idChannels:'4',
+            });
+        }
+        arr.push(JSON.parse(readFileLines('./emails/' + file)));
+    })
+
+
+    // Print the array
+    //console.log(test);
+    return res.status(418).json(arr);
+
+}
 

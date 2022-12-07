@@ -13,6 +13,7 @@ router.post("/send", ConversationService.sendMessage);
 router.delete("/:id", ConversationService.delete);
 router.post("/receivemessage", ConversationService.receivemessage);
 router.get("/receiveemail", ConversationService.receiveEmail);
-router.get("/teste", ConversationService.teste);
+router.get("/exportemail", ConversationService.exportEmail);
+//router.get("/teste", ConversationService.teste);
 
 module.exports = router;
