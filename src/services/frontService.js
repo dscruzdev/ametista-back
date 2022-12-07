@@ -11,6 +11,9 @@ const user_has_languageController = require("../controllers/user_has_languageCon
 const conversationController = require("../controllers/conversationController");
 const user_has_requestsController = require("../controllers/user_has_requestController");
 const logStatusRequest_has_RequestController = require("../controllers/logStatusRequest_has_RequestController");
+const jwt = require('jsonwebtoken');
+
+const { info } = require("../services/authService")
 const fbid = process.env.FBPAGEID;
 const whatsapp = process.env.WHATSAPPNUMBER;
 const sms = process.env.SMSNUMBER;
@@ -23,10 +26,20 @@ exports.chat = async (req, res) => {
     //const { idSubject, name, category, idLanguage } = req.body;
     //Ver quais assuntos o usuario está apto a pegar, se for admin pega todos
     //rules
+    
+    //console.log("req.query.token: ");
+    //console.log(info(req.query.token));
+    //decoded = jwt.decode(req.query.token);
+    console.log(req);
     const idSubject = '1,2,3,4,5';
-    const idLanguage = '1,2,3';
+    const idLanguage = '1';
     const subjects = [];
     const f3subjects = [];
+    return res.status(418);
+
+
+
+    const user = userController.select({ uid: "" })
 
     var subjectdata = idSubject.split(",");
 
@@ -62,13 +75,37 @@ exports.chat = async (req, res) => {
 
 
     if (true) {
+        const areas = await areaController.selectOr(null, res);
+
         const subject = await subjectController.selectOr(filter1, res);
 
         const language = await languageController.selectOr(filter2, res);
 
-        const filter3 = { idSubject: f3subjects, idLanguage: f3languages, status: "open" };
+        const logStatusRequest_has_Request = await logStatusRequest_has_RequestController.select(null, res);
 
-        const request = await requestController.selectOr2(filter3, res);
+        const statusRequests = await logStatusRequest_has_RequestController.select(null, res);
+
+        const filter3 = { idSubject: f3subjects, idLanguage: f3languages };
+
+        const request1 = await requestController.selectOr2(filter3, res);
+
+        const user_has_requests = await user_has_requestsController.select(null, res);
+
+        const request = [];
+
+        request1.forEach(onerequest => {
+            logStatusRequest_has_Request.forEach(relation => {
+                user_has_requests.forEach(user_has_request => {
+                    if (relation.idRequests == onerequest.idRequest && ((user_has_request.idRequests == onerequest.idRequests && relation.idLogStatusRequests == 2 && user_has_request.cpfUsers == cpfUsers) || relation.idLogStatusRequests == 1)) {
+
+                        request.push(onerequest);
+                    }
+                })
+
+            })
+        })
+
+        const requestemails = await requestController.select({ idChannels: 4 }, res);
         //status
 
         var clientscpfs = [];
@@ -79,7 +116,18 @@ exports.chat = async (req, res) => {
             const idRequests = index.idRequests;
             clientscpfs.push({ cpfClients });
             requestsids.push({ idRequests });
+            var most_recent = new Date(0);
+            console.log(most_recent);
+            logStatusRequest_has_Request.forEach(relation => {
+                var thisdate = new Date(relation.createdAt);
+                if (relation.idRequests == index.idRequests && thisdate >= most_recent) {
+                    index.dataValues.idStatus = relation.idLogStatusRequests;
+                    index.dataValues.status = statusRequests[relation.idLogStatusRequests - 1].status
+                    most_recent = new Date(relation.createdAt);
+                }
+            });
         });
+
 
         const filter4 = {
             data: clientscpfs
@@ -134,6 +182,7 @@ exports.chat = async (req, res) => {
 
             response.push(data1);
         });
+        request.forEach
         return res.status(200).json(response);
     } else {
         return res.status(401).json({ 'message': 'Unauthorized' });
