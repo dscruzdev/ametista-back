@@ -5,8 +5,8 @@ const Comment = require('../models/mComment');
 exports.create = async (data, res) => {
     await db.sync();
     response = await Comment.create({
-        Requests_id: data.Requests_id,
-        Users_cpf: data.Users_cpf,
+        idRequests: data.idRequests,
+        cpfUsers: data.cpfUsers,
         comment: data.comment,
     });
     return response;
