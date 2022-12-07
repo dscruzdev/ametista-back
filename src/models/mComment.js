@@ -11,7 +11,7 @@ const Comment = database.define('Comment',{
         primaryKey: true,
         autoIncrement: true
     },
-    IdRequests:{
+    idRequests:{
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

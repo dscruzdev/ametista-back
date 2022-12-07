@@ -51,6 +51,7 @@ app.use("/front", frontRoute);
 app.use("/user", userRoute);
 app.use("/chatbot", chatbotRoute);
 app.use("/conversation", conversationRoute);
+app.use("/comment", commentRoute);
 app.get("/teste", async (req, res) => {
 
     fs.writeFile('helloworld.txt', req.body, function (err) {

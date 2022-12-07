@@ -2,6 +2,7 @@ const commentController = require("../controllers/commentController");
 
 exports.create = async (req, res) => {
     data = req.body;
+    console.log(data)
     //rules
     if (true) {
         comment = await commentController.create(data, res);
@@ -35,6 +36,20 @@ exports.select = async (req, res) => {
         }
     }
 }
+
+exports.select1 = async (req, res) => {
+    data = req.body;
+    idRequests = req.params.id;
+        //We should create the 'filter' param to check if have filters and later get
+        //all the params to filter the response
+        //rules
+        if (true) {
+            comments = await commentController.select({idRequests:idRequests}, res);
+            return res.status(200).json(comments);
+        } else {
+            return res.status(401).json({ 'message': 'Unauthorized' });
+        }
+    } 
 
 exports.update = async (req, res) => {
     data = req.body;

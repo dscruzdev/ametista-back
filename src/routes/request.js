@@ -9,5 +9,6 @@ router.post("/",requestService.create);
 router.put("/",requestService.update);
 router.put("/setscore",requestService.setScore);
 router.get("/",requestService.select);
+router.put("/setscore",requestService.setScore);
 
 module.exports = router;
