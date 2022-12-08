@@ -67,7 +67,7 @@ exports.selectOr2 = async (filters = null, res) => {
         //We can build the filter out of the function and just put in findAll later
         await db.sync();
         response = await Request.findAll({
-            where: { idSubject: { [Op.or]: filters.idSubject }, idLanguage: { [Op.or]: filters.idLanguage } }
+            where: { idSubject: { [Op.or]: filters.idSubject }, idLanguage: { [Op.or]: filters.idLanguage }, idRequests: { [Op.or]: filters.idRequests } }
         });
         return response;
     }

@@ -1,6 +1,8 @@
 const conversationController = require('../controllers/conversationController');
 const requestController = require('../controllers/requestController');
 const clientController = require('../controllers/clientController');
+const logStatusRequest_has_RequestController = require('../controllers/logStatusRequest_has_RequestController');
+
 const sgMail = require('@sendgrid/mail')
 const whatsappnumber = process.env.WHATSAPPNUMBER;
 const smsnumber = process.env.SMSNUMBER;
@@ -185,7 +187,7 @@ exports.exportEmail = async (req, res) => {
     const requests = await requestController.select({ idChannels: 4 }, res);
 
 
-    files.forEach(file => {
+    files.forEach(async file => {
         var create = true;
         requests.forEach(request =>{
             if(request.description == file){
@@ -194,7 +196,7 @@ exports.exportEmail = async (req, res) => {
             
         });
         if(create){
-            requestController.create({
+            const request = await requestController.create({
                 description: file,
                 priority: '1',
                 status: 'open',
@@ -202,6 +204,7 @@ exports.exportEmail = async (req, res) => {
                 idSubject: '5',
                 idChannels:'4',
             });
+            logStatusRequest_has_RequestController.create({idRequests: request.idRequests, idLogStatusRequests: 1}, res);
         }
         arr.push(JSON.parse(readFileLines('./emails/' + file)));
     })
@@ -209,7 +212,7 @@ exports.exportEmail = async (req, res) => {
 
     // Print the array
     //console.log(test);
-    return res.status(418).json(arr);
+    return res.status(200).json(arr);
 
 }
 

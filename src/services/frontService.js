@@ -11,6 +11,7 @@ const user_has_languageController = require("../controllers/user_has_languageCon
 const conversationController = require("../controllers/conversationController");
 const user_has_requestsController = require("../controllers/user_has_requestController");
 const logStatusRequest_has_RequestController = require("../controllers/logStatusRequest_has_RequestController");
+const jwt = require('jsonwebtoken');
 const fbid = process.env.FBPAGEID;
 const whatsapp = process.env.WHATSAPPNUMBER;
 const sms = process.env.SMSNUMBER;
@@ -24,17 +25,29 @@ exports.chat = async (req, res) => {
     //Ver quais assuntos o usuario está apto a pegar, se for admin pega todos
 
     //rules
-    const token = req.params.token;
+    const token = req.query.token;
 
+    const decoded = jwt.decode(token);
     const idSubject = '1,2,3';
-    const idLanguage = '1,2';
+    const idAreas = decoded.areas;
+    const idLanguage = decoded.languages;
     const subjects = [];
     const f3subjects = [];
+    const idAreasr = [];
 
-    var subjectdata = idSubject.split(",");
+    var areas = idAreas.split(",");
 
-    subjectdata.forEach((idSubjects) => {
-        idSubjects = parseInt(idSubjects);
+    areas.forEach((idArea) => {
+        idArea = parseInt(idArea);
+        idAreasr.push(idArea);
+    });
+    //return res.status(418).json(idAreasr);
+    const area_has_subjects = await area_has_subjectController.selectOr({ idAreas: idAreasr }, res);
+
+    //var subjectdata = idSubject.split(",");
+
+    area_has_subjects.forEach((area_has_subject) => {
+        const idSubjects = area_has_subject.idSubjects
         subjects.push({ idSubjects });
         f3subjects.push(idSubjects);
     });
@@ -65,15 +78,48 @@ exports.chat = async (req, res) => {
 
 
     if (true) {
+        const user = await userController.findByUid(decoded.uid, res);
+
         const subject = await subjectController.selectOr(filter1, res);
 
         const language = await languageController.selectOr(filter2, res);
 
-        const filter3 = { idSubject: f3subjects, idLanguage: f3languages, status: "open" };
+        const relationStatus = await logStatusRequest_has_RequestController.select(null, res);
+
+        const relationUser = await user_has_requestsController.select({ cpfUsers: user.cpfUsers }, res);
+
+        const requests = await requestController.select(null, res);
+
+        const relationfilter = [];
+
+        requests.forEach(request => {
+            var most_recent = new Date(0);
+            var tempStatus = 0;
+            relationStatus.forEach(r => {
+                if (most_recent <= r.createdAt && request.idRequests == r.idRequests) {
+                    most_recent = r.createdAt;
+                    tempStatus = r.idLogStatusRequests;
+                }
+            });
+            if (tempStatus == 1) {
+                relationfilter.push(request.idRequests)
+            }
+
+        })
+
+
+        relationUser.forEach(r => {
+            if (r.cpfUsers == user.cpfUsers) {
+                relationfilter.push(r.idRequests);
+            }
+        });
+
+        const filter3 = { idSubject: f3subjects, idLanguage: f3languages, idRequests: relationfilter };
 
         const request = await requestController.selectOr2(filter3, res);
-        //status
 
+        console.log(filter3);
+        //status
         var clientscpfs = [];
         var requestsids = [];
 
@@ -82,7 +128,6 @@ exports.chat = async (req, res) => {
             const idRequests = index.idRequests;
             clientscpfs.push({ cpfClients });
             requestsids.push({ idRequests });
-
         });
 
         const filter4 = {
@@ -137,6 +182,59 @@ exports.chat = async (req, res) => {
             });
             data1.dataValues.requests = hisrequests;
 
+            response.push(data1);
+        });
+        const emailsRequests = request.filter(i => {
+            return (i.idChannels == 4);
+        });
+        const emailClients = [];
+        for (let index = 0; index < emailsRequests.length; index++) {
+            emailClients.push({
+                name: `Email: ${emailsRequests[index].idRequests}`,
+                uid: emailsRequests[index].idRequests,
+                requests: [],
+            });
+
+        }
+        emailClients.forEach(data1 => {
+            var hisrequests = [];
+            emailsRequests.forEach(data2 => {
+                var varforlanguage;
+                var varforsubject;
+                var hiscomments = [];
+                var hismessages = [];
+                var messages = [];
+                language.forEach(data3 => {
+                    if (data3.idLanguages == data2.idLanguage) {
+                        varforlanguage = data3.language;
+                    }
+                })
+                subject.forEach(data3 => {
+                    if (data3.idSubjects == data2.idSubject) {
+                        varforsubject = data3.name;
+                    }
+                })
+                comment.forEach(data3 => {
+                    if (data3.idRequests == data2.idRequests) {
+                        hiscomments.push(data3);
+                    }
+                });
+                // message.forEach(data4 => {
+                //     if (data4.messageID == data2.something) {
+                //         hismessages.push(data4);
+                //     }
+                // });
+                data2.dataValues.comments = hiscomments;
+                data2.dataValues.language = varforlanguage;
+                data2.dataValues.subject = varforsubject;
+
+                
+                if (data1.uid == data2.idRequests) {
+                    hisrequests.push(data2);
+                }
+                
+            });
+            data1.requests = hisrequests;
             response.push(data1);
         });
         return res.status(200).json(response);
@@ -361,7 +459,7 @@ exports.requests = async (req, res) => {
         const base = await requestController.select({ idRequests: idRequest }, res);
         requests = await requestController.select({ cpfClients: base[0].cpfClients }, res);
     } else {
-         requests = await requestController.select();
+        requests = await requestController.select();
     }
 
     const subjects = await subjectController.select();
@@ -515,8 +613,8 @@ exports.messages = async (req, res) => {
 
     if (true) {
         const request = await requestController.find(idRequests);
-        if(request.idChannels == 4){
-            return res.status(200).json({"message":"nothing to return"});
+        if (request.idChannels == 4) {
+            return res.status(200).json({ "message": "nothing to return" });
         }
         const messages = await conversationController.listMessages(request.SID);
         const user = await userController.findByUid(uid);
