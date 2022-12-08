@@ -31,6 +31,8 @@ const user_has_requestRoute = require("./src/routes/user_has_request");
 const chatbotRoute = require("./src/routes/chatbot");
 const frontRoute = require("./src/routes/front");
 const conversationRoute = require("./src/routes/conversation");
+const {chattouser} = require('./src/services/requestService');
+
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -92,7 +94,8 @@ io.on('connection', (stream) => {
     console.log(`O usuário ${stream.id} Conectou`);
     stream.on("join_conversation", (data) => {
         stream.join(data.idRequests);
-        console.log(`User ${data.cpfUsers} with ID: ${stream.id} joined conversation: ${data.idRequests}`);
+        //give a conversation to a user
+        chattouser(data.uid, data.idRequests);
         //console.log(stream);
     });
 

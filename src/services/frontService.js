@@ -22,7 +22,10 @@ const { Op } = require("sequelize");
 exports.chat = async (req, res) => {
     //const { idSubject, name, category, idLanguage } = req.body;
     //Ver quais assuntos o usuario está apto a pegar, se for admin pega todos
+
     //rules
+    const token = req.params.token;
+
     const idSubject = '1,2,3';
     const idLanguage = '1,2';
     const subjects = [];
@@ -512,6 +515,9 @@ exports.messages = async (req, res) => {
 
     if (true) {
         const request = await requestController.find(idRequests);
+        if(request.idChannels == 4){
+            return res.status(200).json({"message":"nothing to return"});
+        }
         const messages = await conversationController.listMessages(request.SID);
         const user = await userController.findByUid(uid);
         const client = await clientController.findByPK(request.cpfClients);

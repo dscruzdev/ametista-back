@@ -27,6 +27,10 @@ const Request = database.define('Request', {
         type: 'DATETIME',
 
     },
+    openedAt: {
+        type: 'DATETIME',
+        allowNull: true,
+    },
     description: {
         type: Sequelize.STRING,
 
