@@ -2,6 +2,7 @@ const clientController = require("../controllers/clientController");
 const areaController = require("../controllers/areaController");
 const area_has_userController = require("../controllers/area_has_userController");
 const area_has_subjectController = require("../controllers/area_has_subjectController");
+const logstatusrequest_has_requestController = require("../controllers/logstatusrequest_has_requestController");
 const userController = require("../controllers/userController");
 const requestController = require("../controllers/requestController");
 const commentController = require("../controllers/commentController");
@@ -133,7 +134,6 @@ exports.chat = async (req, res) => {
                 }
             });
             data1.dataValues.requests = hisrequests;
-
             response.push(data1);
         });
         return res.status(200).json(response);
@@ -193,6 +193,8 @@ exports.frontticket = async (req, res) => {
         const filter3 = { idRequests: id };
 
         const request = await requestController.select(filter3, res);
+
+        const logstatusrequest_has_request = await logstatusrequest_has_requestController.select(null, res);
         //status
 
         var clientscpfs = [];
@@ -203,6 +205,26 @@ exports.frontticket = async (req, res) => {
             const idRequests = index.idRequests;
             clientscpfs.push({ cpfClients });
             requestsids.push({ idRequests });
+            logstatusrequest_has_request.forEach((logStatus) => {
+                var most_recent = new Date(0);
+                if ((logStatus.idRequests == index.idRequests) && (most_recent <= logStatus.createdAt)) {
+                    most_recent = logStatus.createdAt;
+                    switch (logStatus.idStatusRequests) {
+                        case 1:
+                            index.dataValues.status = "Em aberto";
+                            index.dataValues.idStatus = 1;
+                            break;
+                        case 2:
+                            index.dataValues.status = "Em andamento";
+                            index.dataValues.idStatus = 2;
+                            break;
+                        default:
+                            index.dataValues.status = "Finalizado";
+                            index.dataValues.idStatus = 3;
+                            break;
+                    }
+                }
+            });
 
         });
 
@@ -276,7 +298,6 @@ exports.updateinfos = async (req, res) => {
         phone: phone
     };
 
-
     const requestbody = {
         idRequests: idRequests,
         idSubject: subject,
@@ -286,6 +307,8 @@ exports.updateinfos = async (req, res) => {
     console.log(requestbody)
 
     const client = await clientController.update(clientbody, res);
+
+    //const relation = await logStatusRequest_has_RequestController.update({idLogStatusRequests: 2, idRequests: idRequests}, res);
 
     const request = await requestController.update(requestbody, res);
 
@@ -354,12 +377,10 @@ exports.requests = async (req, res) => {
     const body = req.body;
     var requests;
     var idRequest;
-    if (req.query.id) {
-        const base = await requestController.select({ idRequests: idRequest }, res);
-        requests = await requestController.select({ cpfClients: base[0].cpfClients }, res);
-    } else {
-         requests = await requestController.select();
-    }
+
+    requests = await requestController.select();
+
+    const logstatusrequest_has_request = await logstatusrequest_has_requestController.select(null, res);
 
     const subjects = await subjectController.select();
 
@@ -376,6 +397,27 @@ exports.requests = async (req, res) => {
         clients.forEach(data3 => {
             if (data3.cpfClients == request.cpfClients) {
                 varforclient = data3.name;
+            }
+        });
+
+        logstatusrequest_has_request.forEach((logStatus) => {
+            var most_recent = new Date(0);
+            if ((logStatus.idRequests == request.idRequests) && (most_recent <= logStatus.createdAt)) {
+                most_recent = logStatus.createdAt;
+                switch (logStatus.idStatusRequests) {
+                    case 1:
+                        request.dataValues.status = "Em aberto";
+                        request.dataValues.idStatus = 1;
+                        break;
+                    case 2:
+                        request.dataValues.status = "Em andamento";
+                        request.dataValues.idStatus = 2;
+                        break;
+                    default:
+                        request.dataValues.status = "Finalizado";
+                        request.dataValues.idStatus = 3;
+                        break;
+                }
             }
         });
         var date = new Date(request.dataValues.createdAt);
@@ -503,6 +545,34 @@ exports.clientrequests = async (req, res) => {
 
     const base = await requestController.select({ idRequests: idRequest }, res);
     const requests = await requestController.select({ cpfClients: base[0].cpfClients }, res);
+
+    const subjects = await subjectController.select();
+
+    const clients = await clientController.select();
+
+    requests.forEach(request => {
+        var varforsubject;
+        subjects.forEach(data3 => {
+            if (data3.idSubjects == request.idSubject) {
+                varforsubject = data3.name;
+            }
+        });
+        var varforclient;
+        clients.forEach(data3 => {
+            if (data3.cpfClients == request.cpfClients) {
+                varforclient = data3.name;
+            }
+        });
+        var date = new Date(request.dataValues.createdAt);
+        //temp_order_date[2] = temp_order_date[2].split("T");
+        const order_date = date_n_time.format(date, "DD/MM/YYYY");
+        const order_time = date_n_time.format(date, "HH:mm");
+        request.dataValues.subject = varforsubject;
+        request.dataValues.client = varforclient;
+        request.dataValues.order_date = order_date;
+        request.dataValues.order_time = order_time;
+
+    });
 
     return res.status(200).json(requests);
 }
@@ -706,11 +776,9 @@ exports.inicio = async (req, res) => {
     function comfdata() {
         requests.forEach((request) => {
             var reabertura = 0;
-            requests.forEach(request => {
                 var fechamento;
                 logstatusrequest_has_request.forEach(relacao => {
                     if (relacao.idRequests == request.idRequests) {
-                        console.log(fechamento);
                         if (relacao.idLogStatusRequests == 3) {
                             fechamento = relacao.createdAt;
                         }
@@ -718,10 +786,12 @@ exports.inicio = async (req, res) => {
                         const data_teste = new Date(fechamento);
                         if (relacao.idLogStatusRequests == 1 && relacao.createdAt >= fechamento) {
                             reabertura++;
-                        }
+                        } 
                     }
+                    request.dataValues.reabertura = reabertura;
                 });
-            });
+                
+            
             logstatusrequest_has_request.forEach((logStatus) => {
                 var most_recent = new Date(0);
                 if ((logStatus.idRequests == request.idRequests) && (most_recent <= logStatus.createdAt)) {

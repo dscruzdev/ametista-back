@@ -4,8 +4,8 @@ const Logstatusrequest_has_request = require('../models/mLogstatusrequest_has_re
 exports.create = async (data, res) => {
     await db.sync();
     response = await Logstatusrequest_has_request.create({
-        idLogStatus: data.idLogStatus,
-        idLogstatusrequest_has_request: data.idLogstatusrequest_has_request,
+        idLogStatusRequests: data.idLogStatusRequests,
+        idRequests: data.idRequests,
 
     });
     return response;
