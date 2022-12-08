@@ -4,8 +4,8 @@ const User_has_Request = require('../models/mUser_has_Request');
 exports.create = async (data, res) => {
     await db.sync();
     response = await User_has_Request.create({
-        User_cpf: data.User_cpf,
-        Request_id: data.Request_id,
+        cpfUsers: data.cpfUsers,
+        idRequests: data.idRequests,
     });
     return response;
 }

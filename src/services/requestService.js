@@ -1,7 +1,11 @@
 const requestController = require("../controllers/requestController");
+const userController = require("../controllers/userController");
+const user_has_requestController = require("../controllers/user_has_requestController");
 const conversationController = require("../controllers/conversationController");
+const logstatusrequest_has_requestController = require("../controllers/logstatusrequest_has_requestController");
 
 const { Op } = require("sequelize");
+const Request = require("../models/mRequest");
 
 exports.create = async (req, res) => {
     data = req.body;
@@ -11,7 +15,7 @@ exports.create = async (req, res) => {
         var sid;
         request = await requestController.create(data, res);
         sid = await conversationController.newConversation(request.idRequests);
-        request.set({SID:sid});
+        request.set({ SID: sid });
         await request.save();
         return res.status(201).json(request);
     } else {
@@ -83,7 +87,7 @@ exports.update = async (req, res) => {
 }
 
 exports.setScore = async (req, res) => {
-    const {csat, nps, idRequests} = req.body;
+    const { csat, nps, idRequests } = req.body;
 
     const request = await requestController.find(parseInt(idRequests));
     if (parseInt(csat) > 0 && parseInt(csat) <= 5) {
@@ -109,7 +113,7 @@ exports.delete = async (req, res) => {
 }
 
 exports.setScore = async (req, res) => {
-    const {csat, nps, idRequests} = req.body;
+    const { csat, nps, idRequests } = req.body;
 
     const request = await requestController.find(parseInt(idRequests));
     if (parseInt(csat) > 0 && parseInt(csat) <= 5) {
@@ -121,4 +125,25 @@ exports.setScore = async (req, res) => {
     await request.save();
     return res.status(201).json(request);
 
+}
+
+exports.chattouser = async (user, idRequests) => {
+    const now = new Date();
+    const users = await userController.select({ uid: user });
+    const requests = await requestController.select({ idRequests: idRequests });
+    const oneUser = users[0];
+    const oneRequest = requests[0];
+    if (oneRequest.openedAt == null) {
+        oneRequest.update({
+            openedAt: now
+        });
+        await user_has_requestController.create({ cpfUsers: oneUser.cpfUsers, idRequests: idRequests });
+        await logstatusrequest_has_requestController.create({ idLogStatusRequests: 2, idRequests: idRequests });
+        oneRequest.save();
+    }
+    //Emitir socket para sumir este chamado da tela dos outros
+
+
+
+    console.log(`O usuário ${user} abriu o chat ${idRequests}`);
 }

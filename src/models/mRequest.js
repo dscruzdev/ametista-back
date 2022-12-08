@@ -14,7 +14,7 @@ const Request = database.define('Request', {
     },
     cpfClients: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: client,
             key: 'cpfClients'
@@ -26,6 +26,10 @@ const Request = database.define('Request', {
     endedAt: {
         type: 'DATETIME',
 
+    },
+    openedAt: {
+        type: 'DATETIME',
+        allowNull: true,
     },
     description: {
         type: Sequelize.STRING,
