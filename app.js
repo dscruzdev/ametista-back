@@ -53,6 +53,7 @@ app.use("/front", frontRoute);
 app.use("/user", userRoute);
 app.use("/chatbot", chatbotRoute);
 app.use("/conversation", conversationRoute);
+app.use("/relation", logstatusrequest_has_requestRoute);
 app.use("/comment", commentRoute);
 app.get("/teste", async (req, res) => {
 
