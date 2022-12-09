@@ -16,6 +16,9 @@ const fbid = process.env.FBPAGEID;
 const whatsapp = process.env.WHATSAPPNUMBER;
 const sms = process.env.SMSNUMBER;
 const email = process.env.EMAIL;
+inspect = require('util').inspect;
+var fs = require('fs'), fileStream;
+const _ = require('lodash');
 
 const date_n_time = require('date-and-time');
 const { Op } = require("sequelize");
@@ -92,6 +95,8 @@ exports.chat = async (req, res) => {
 
         const relationfilter = [];
 
+        const except = []
+
         requests.forEach(request => {
             var most_recent = new Date(0);
             var tempStatus = 0;
@@ -102,10 +107,13 @@ exports.chat = async (req, res) => {
                 }
             });
             if (tempStatus == 1) {
-                relationfilter.push(request.idRequests)
+                relationfilter.push(request.idRequests);
+            }
+            if (tempStatus == 3) {
+                except.push(request.idRequests);
             }
 
-        })
+        });
 
 
         relationUser.forEach(r => {
@@ -114,7 +122,7 @@ exports.chat = async (req, res) => {
             }
         });
 
-        const filter3 = { idSubject: f3subjects, idLanguage: f3languages, idRequests: relationfilter };
+        const filter3 = { idSubject: f3subjects, idLanguage: f3languages, idRequests: relationfilter, except:except };
 
         const request = await requestController.selectOr2(filter3, res);
 
@@ -192,6 +200,7 @@ exports.chat = async (req, res) => {
             emailClients.push({
                 name: `Email: ${emailsRequests[index].idRequests}`,
                 uid: emailsRequests[index].idRequests,
+                cpfClients: emailsRequests[index].idRequests,
                 requests: [],
             });
 
@@ -228,11 +237,11 @@ exports.chat = async (req, res) => {
                 data2.dataValues.language = varforlanguage;
                 data2.dataValues.subject = varforsubject;
 
-                
+
                 if (data1.uid == data2.idRequests) {
                     hisrequests.push(data2);
                 }
-                
+
             });
             data1.requests = hisrequests;
             response.push(data1);
@@ -614,7 +623,57 @@ exports.messages = async (req, res) => {
     if (true) {
         const request = await requestController.find(idRequests);
         if (request.idChannels == 4) {
-            return res.status(200).json({ "message": "nothing to return" });
+            const readFileLines = filename =>
+                fs
+                    .readFileSync(filename)
+                    .toString('UTF8');
+            const user = await userController.findByUid(uid);
+            const body = JSON.parse(readFileLines('./emails/' + request.description));
+
+            const clientData = {
+                id: "Email: " + idRequests,
+                name: "Email: " + idRequests,
+                //avatar: string;
+                lastMessage: "",
+                totalUnread: 0,
+                lastMessageOn: "",
+                email: body.from.value[0].address,
+                phone: "client.phone",
+                //location: string;
+                //languages: string;
+                //subject: string;
+            };
+            const userData = {
+                id: uid,
+                name: user.name.split(" ")[0],
+                //avatar: string;
+                lastMessage: "",
+                totalUnread: 0,
+                lastMessageOn: "",
+                email: user.email,
+                phone: user.phone,
+                //location: string;
+                //languages: string;
+                //subject: string;
+            }
+            
+            //console.log(body);
+            //return res.status(418).json(body);
+            const messagesresponse = [];
+
+            messagesresponse.push({
+                "from": clientData,
+                "to": userData,
+                "message": {
+                    "type": "text",
+                    "value": body.html.slice(0,10)
+                },
+                "sendOn": "00:00"
+            });
+            clientData.lastMessage = body.text.slice(0,10);
+            clientData.lastMessageOn = "00:00";
+
+            return res.status(200).json(messagesresponse);
         }
         const messages = await conversationController.listMessages(request.SID);
         const user = await userController.findByUid(uid);
